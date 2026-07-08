@@ -6,16 +6,15 @@ FastAPI Server
 
 from fastapi import FastAPI
 
-from backend.ai.chat import AIChat
 from backend.models.chat_request import ChatRequest
-from backend.ai.prompts import SYSTEM_PROMPT
+from backend.services.chat_service import ChatService
 
 app = FastAPI(
     title="ElectricalAI Pro API",
     version="1.0.0",
 )
 
-chat = AIChat()
+chat_service = ChatService()
 
 
 @app.get("/")
@@ -27,18 +26,7 @@ def root():
 
 @app.post("/chat")
 def chat_endpoint(request: ChatRequest):
-    messages = [
-        {
-            "role": "system",
-            "content": SYSTEM_PROMPT,
-        },
-        {
-            "role": "user",
-            "content": request.message,
-        },
-    ]
-
-    answer = chat.ask(messages)
+    answer = chat_service.ask(request.message)
 
     return {
         "answer": answer
