@@ -7,7 +7,10 @@ FastAPI Server
 from fastapi import FastAPI
 
 from backend.models.chat_request import ChatRequest
+from backend.models.ohms_law_request import OhmsLawRequest
+
 from backend.services.chat_service import ChatService
+from backend.services.ohms_law_service import OhmsLawService
 
 app = FastAPI(
     title="ElectricalAI Pro API",
@@ -15,6 +18,7 @@ app = FastAPI(
 )
 
 chat_service = ChatService()
+ohms_service = OhmsLawService()
 
 
 @app.get("/")
@@ -31,3 +35,12 @@ def chat_endpoint(request: ChatRequest):
     return {
         "answer": answer
     }
+
+
+@app.post("/ohms-law")
+def ohms_law(request: OhmsLawRequest):
+    return ohms_service.calculate(
+        voltage=request.voltage,
+        current=request.current,
+        resistance=request.resistance,
+    )
