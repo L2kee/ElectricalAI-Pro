@@ -10,11 +10,13 @@ from backend.models.chat_request import ChatRequest
 from backend.models.ohms_law_request import OhmsLawRequest
 from backend.models.voltage_drop_request import VoltageDropRequest
 from backend.models.conduit_fill_request import ConduitFillRequest
+from backend.models.box_fill_request import BoxFillRequest
 
 from backend.services.chat_service import ChatService
 from backend.services.ohms_law_service import OhmsLawService
 from backend.services.voltage_drop_service import VoltageDropService
 from backend.services.conduit_fill_service import ConduitFillService
+from backend.services.box_fill_service import BoxFillService
 
 app = FastAPI(
     title="ElectricalAI Pro API",
@@ -25,6 +27,7 @@ chat_service = ChatService()
 ohms_service = OhmsLawService()
 voltage_drop_service = VoltageDropService()
 conduit_fill_service = ConduitFillService()
+box_fill_service = BoxFillService()
 
 
 @app.get("/")
@@ -66,4 +69,13 @@ def conduit_fill(request: ConduitFillRequest):
         conduit_area=request.conduit_area,
         wire_area=request.wire_area,
         wire_count=request.wire_count,
+    )
+
+
+@app.post("/box-fill")
+def box_fill(request: BoxFillRequest):
+    return box_fill_service.calculate(
+        box_volume=request.box_volume,
+        conductor_count=request.conductor_count,
+        conductor_allowance=request.conductor_allowance,
     )
