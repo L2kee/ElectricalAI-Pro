@@ -12,6 +12,7 @@ from backend.models.voltage_drop_request import VoltageDropRequest
 from backend.models.conduit_fill_request import ConduitFillRequest
 from backend.models.box_fill_request import BoxFillRequest
 from backend.models.wire_ampacity_request import WireAmpacityRequest
+from backend.models.material_list_request import MaterialListRequest
 
 from backend.services.chat_service import ChatService
 from backend.services.ohms_law_service import OhmsLawService
@@ -19,6 +20,7 @@ from backend.services.voltage_drop_service import VoltageDropService
 from backend.services.conduit_fill_service import ConduitFillService
 from backend.services.box_fill_service import BoxFillService
 from backend.services.wire_ampacity_service import WireAmpacityService
+from backend.services.material_list_service import MaterialListService
 
 app = FastAPI(
     title="ElectricalAI Pro API",
@@ -35,6 +37,7 @@ voltage_drop_service = VoltageDropService()
 conduit_fill_service = ConduitFillService()
 box_fill_service = BoxFillService()
 wire_ampacity_service = WireAmpacityService()
+material_list_service = MaterialListService()
 
 # ============================
 # Routes
@@ -50,10 +53,8 @@ def root():
 
 @app.post("/chat")
 def chat_endpoint(request: ChatRequest):
-    answer = chat_service.ask(request.message)
-
     return {
-        "answer": answer
+        "answer": chat_service.ask(request.message)
     }
 
 
@@ -98,3 +99,12 @@ def wire_ampacity(request: WireAmpacityRequest):
         wire_size=request.wire_size,
         temperature_rating=request.temperature_rating,
     )
+
+
+@app.post("/material-list")
+def material_list(request: MaterialListRequest):
+    return {
+        "materials": material_list_service.generate(
+            request.project_description
+        )
+    }
