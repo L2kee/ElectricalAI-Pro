@@ -11,23 +11,34 @@ from backend.models.ohms_law_request import OhmsLawRequest
 from backend.models.voltage_drop_request import VoltageDropRequest
 from backend.models.conduit_fill_request import ConduitFillRequest
 from backend.models.box_fill_request import BoxFillRequest
+from backend.models.wire_ampacity_request import WireAmpacityRequest
 
 from backend.services.chat_service import ChatService
 from backend.services.ohms_law_service import OhmsLawService
 from backend.services.voltage_drop_service import VoltageDropService
 from backend.services.conduit_fill_service import ConduitFillService
 from backend.services.box_fill_service import BoxFillService
+from backend.services.wire_ampacity_service import WireAmpacityService
 
 app = FastAPI(
     title="ElectricalAI Pro API",
     version="1.0.0",
 )
 
+# ============================
+# Services
+# ============================
+
 chat_service = ChatService()
 ohms_service = OhmsLawService()
 voltage_drop_service = VoltageDropService()
 conduit_fill_service = ConduitFillService()
 box_fill_service = BoxFillService()
+wire_ampacity_service = WireAmpacityService()
+
+# ============================
+# Routes
+# ============================
 
 
 @app.get("/")
@@ -78,4 +89,12 @@ def box_fill(request: BoxFillRequest):
         box_volume=request.box_volume,
         conductor_count=request.conductor_count,
         conductor_allowance=request.conductor_allowance,
+    )
+
+
+@app.post("/wire-ampacity")
+def wire_ampacity(request: WireAmpacityRequest):
+    return wire_ampacity_service.calculate(
+        wire_size=request.wire_size,
+        temperature_rating=request.temperature_rating,
     )
