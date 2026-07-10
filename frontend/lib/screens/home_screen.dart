@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/feature_card.dart';
+import '../widgets/quick_action_card.dart';
+
 import 'ai_screen.dart';
 import 'calculators_screen.dart';
 import 'material_screen.dart';
@@ -8,100 +11,195 @@ import 'settings_screen.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  Widget buildButton({
-    required BuildContext context,
-    required IconData icon,
-    required String title,
-    required Widget page,
-  }) {
-    return SizedBox(
-      width: double.infinity,
-      height: 70,
-      child: ElevatedButton.icon(
-        icon: Icon(icon, size: 30),
-        label: Text(
-          title,
-          style: const TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => page,
-            ),
-          );
-        },
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xffF4F5F7),
+
       appBar: AppBar(
-        title: const Text("ElectricalAI Pro"),
-        centerTitle: true,
+        title: const Text("ElectricalAI"),
+        actions: const [
+          Padding(
+            padding: EdgeInsets.only(right: 18),
+            child: Icon(Icons.notifications_none),
+          ),
+        ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
+
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(22),
+
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+
           children: [
-            const SizedBox(height: 20),
-
-            const Icon(
-              Icons.electrical_services,
-              size: 90,
-              color: Colors.red,
-            ),
-
-            const SizedBox(height: 15),
 
             const Text(
-              "ElectricalAI Pro",
+              "Welcome Back",
               style: TextStyle(
-                fontSize: 30,
+                fontSize: 18,
+                color: Colors.grey,
+              ),
+            ),
+
+            const SizedBox(height: 4),
+
+            const Text(
+              "Electrician",
+              style: TextStyle(
+                fontSize: 36,
                 fontWeight: FontWeight.bold,
               ),
             ),
 
-            const SizedBox(height: 40),
+            const SizedBox(height: 30),
 
-            buildButton(
-              context: context,
+            const Text(
+              "Quick Actions",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            SizedBox(
+              height: 130,
+
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+
+                children: [
+
+                  QuickActionCard(
+                    icon: Icons.bolt,
+                    title: "Ohm's\nLaw",
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const CalculatorsScreen(),
+                        ),
+                      );
+                    },
+                  ),
+
+                  const SizedBox(width: 14),
+
+                  QuickActionCard(
+                    icon: Icons.electric_bolt,
+                    title: "Voltage\nDrop",
+                    onTap: () {},
+                  ),
+
+                  const SizedBox(width: 14),
+
+                  QuickActionCard(
+                    icon: Icons.smart_toy,
+                    title: "Ask\nAI",
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const AIScreen(),
+                        ),
+                      );
+                    },
+                  ),
+
+                  const SizedBox(width: 14),
+
+                  QuickActionCard(
+                    icon: Icons.inventory,
+                    title: "Material\nList",
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const MaterialScreen(),
+                        ),
+                      );
+                    },
+                  ),
+
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 35),
+
+            const Text(
+              "Features",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 14),
+
+            FeatureCard(
               icon: Icons.smart_toy,
+              iconColor: Colors.red,
               title: "AI Assistant",
-              page: AIScreen(),
+              subtitle: "Ask questions, troubleshoot, and learn.",
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const AIScreen(),
+                  ),
+                );
+              },
             ),
 
-            const SizedBox(height: 15),
-
-            buildButton(
-              context: context,
+            FeatureCard(
               icon: Icons.calculate,
+              iconColor: Colors.orange,
               title: "Calculators",
-              page: CalculatorsScreen(),
+              subtitle: "Professional NEC electrical calculators.",
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const CalculatorsScreen(),
+                  ),
+                );
+              },
             ),
 
-            const SizedBox(height: 15),
-
-            buildButton(
-              context: context,
+            FeatureCard(
               icon: Icons.list_alt,
-              title: "Material List",
-              page: MaterialScreen(),
+              iconColor: Colors.green,
+              title: "Material Lists",
+              subtitle: "Generate project material lists.",
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const MaterialScreen(),
+                  ),
+                );
+              },
             ),
 
-            const SizedBox(height: 15),
-
-            buildButton(
-              context: context,
+            FeatureCard(
               icon: Icons.settings,
+              iconColor: Colors.grey,
               title: "Settings",
-              page: SettingsScreen(),
+              subtitle: "Customize your experience.",
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const SettingsScreen(),
+                  ),
+                );
+              },
             ),
+
+            const SizedBox(height: 30),
           ],
         ),
       ),

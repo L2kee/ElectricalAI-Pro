@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import 'theme/app_theme.dart';
 import 'screens/home_screen.dart';
 
 void main() {
@@ -13,12 +15,9 @@ class ElectricalAIProApp extends StatelessWidget {
     return MaterialApp(
       title: 'ElectricalAI Pro',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.red,
-        ),
-        useMaterial3: true,
-      ),
+
+      theme: AppTheme.lightTheme,
+
       home: const HomeScreen(),
     );
   }
