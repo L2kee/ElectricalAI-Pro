@@ -15,21 +15,18 @@ class AIService {
       }),
     );
 
-    print("=================================");
-    print("STATUS CODE: ${response.statusCode}");
-    print("RAW BODY:");
-    print(response.body);
-    print("=================================");
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
 
-    final data = jsonDecode(response.body);
+      if (data["answer"] != null) {
+        return data["answer"].toString();
+      }
 
-    print("DECODED JSON:");
-    print(data);
-
-    if (data["answer"] != null) {
-      return data["answer"].toString();
+      throw Exception("Backend returned no answer.");
     }
 
-    throw Exception("No 'answer' field found in response.");
+    throw Exception(
+      "Server error ${response.statusCode}: ${response.body}",
+    );
   }
 }
