@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class AIService {
-  // FastAPI backend
   static const String baseUrl = "http://127.0.0.1:8000";
 
   Future<String> askAI(String message) async {
@@ -16,21 +15,21 @@ class AIService {
       }),
     );
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
+    print("=================================");
+    print("STATUS CODE: ${response.statusCode}");
+    print("RAW BODY:");
+    print(response.body);
+    print("=================================");
 
-      // Your FastAPI server returns:
-      // { "answer": "..." }
+    final data = jsonDecode(response.body);
 
-      if (data["answer"] != null) {
-        return data["answer"].toString();
-      } else {
-        throw Exception("Backend returned no answer.");
-      }
-    } else {
-      throw Exception(
-        "Server error ${response.statusCode}: ${response.body}",
-      );
+    print("DECODED JSON:");
+    print(data);
+
+    if (data["answer"] != null) {
+      return data["answer"].toString();
     }
+
+    throw Exception("No 'answer' field found in response.");
   }
 }
