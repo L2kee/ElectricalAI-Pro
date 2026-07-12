@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'ohms_law_screen.dart';
+
 class CalculatorsScreen extends StatelessWidget {
   const CalculatorsScreen({super.key});
 
@@ -25,9 +27,10 @@ class CalculatorsScreen extends StatelessWidget {
           ),
           onPressed: () {
             if (enabled) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Ohm's Law Calculator coming next!"),
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const OhmsLawScreen(),
                 ),
               );
             } else {
