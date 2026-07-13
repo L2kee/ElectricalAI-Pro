@@ -1,47 +1,18 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_colors.dart';
+import '../widgets/feature_card.dart';
+
 import 'ohms_law_screen.dart';
+import 'voltage_drop_screen.dart';
 
 class CalculatorsScreen extends StatelessWidget {
   const CalculatorsScreen({super.key});
 
-  Widget buildCalculatorButton({
-    required BuildContext context,
-    required IconData icon,
-    required String title,
-    required bool enabled,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 15),
-      child: SizedBox(
-        width: double.infinity,
-        height: 65,
-        child: ElevatedButton.icon(
-          icon: Icon(icon, size: 28),
-          label: Text(
-            title,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          onPressed: () {
-            if (enabled) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const OhmsLawScreen(),
-                ),
-              );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Coming Soon"),
-                ),
-              );
-            }
-          },
-        ),
+  void _comingSoon(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Coming Soon"),
       ),
     );
   }
@@ -54,48 +25,78 @@ class CalculatorsScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
-        child: Column(
+        child: ListView(
           children: [
-            buildCalculatorButton(
-              context: context,
+            FeatureCard(
               icon: Icons.bolt,
+              iconColor: AppColors.primary,
               title: "Ohm's Law",
-              enabled: true,
+              subtitle: "Calculate voltage, current, or resistance.",
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const OhmsLawScreen(),
+                  ),
+                );
+              },
             ),
 
-            buildCalculatorButton(
-              context: context,
+            const SizedBox(height: 18),
+
+            FeatureCard(
               icon: Icons.electric_bolt,
+              iconColor: AppColors.accent,
               title: "Voltage Drop",
-              enabled: false,
+              subtitle: "Calculate conductor voltage drop.",
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const VoltageDropScreen(),
+                  ),
+                );
+              },
             ),
 
-            buildCalculatorButton(
-              context: context,
+            const SizedBox(height: 18),
+
+            FeatureCard(
               icon: Icons.cable,
+              iconColor: Colors.deepPurple,
               title: "Wire Ampacity",
-              enabled: false,
+              subtitle: "Determine allowable conductor ampacity.",
+              onTap: () => _comingSoon(context),
             ),
 
-            buildCalculatorButton(
-              context: context,
+            const SizedBox(height: 18),
+
+            FeatureCard(
               icon: Icons.inventory_2,
+              iconColor: AppColors.success,
               title: "Box Fill",
-              enabled: false,
+              subtitle: "Calculate electrical box fill capacity.",
+              onTap: () => _comingSoon(context),
             ),
 
-            buildCalculatorButton(
-              context: context,
+            const SizedBox(height: 18),
+
+            FeatureCard(
               icon: Icons.view_in_ar,
+              iconColor: Colors.teal,
               title: "Conduit Fill",
-              enabled: false,
+              subtitle: "Calculate conduit fill percentage.",
+              onTap: () => _comingSoon(context),
             ),
 
-            buildCalculatorButton(
-              context: context,
+            const SizedBox(height: 18),
+
+            FeatureCard(
               icon: Icons.calculate,
+              iconColor: Colors.orange,
               title: "Circuit Load",
-              enabled: false,
+              subtitle: "Calculate branch circuit load.",
+              onTap: () => _comingSoon(context),
             ),
           ],
         ),

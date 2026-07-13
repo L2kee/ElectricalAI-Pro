@@ -12,14 +12,11 @@ class OhmsLawScreen extends StatefulWidget {
 class _OhmsLawScreenState extends State<OhmsLawScreen> {
   final CalculatorService _calculatorService = CalculatorService();
 
-  final TextEditingController _voltageController =
-      TextEditingController();
+  final TextEditingController _voltageController = TextEditingController();
 
-  final TextEditingController _currentController =
-      TextEditingController();
+  final TextEditingController _currentController = TextEditingController();
 
-  final TextEditingController _resistanceController =
-      TextEditingController();
+  final TextEditingController _resistanceController = TextEditingController();
 
   bool _loading = false;
 
@@ -34,14 +31,11 @@ class _OhmsLawScreenState extends State<OhmsLawScreen> {
   }
 
   Future<void> _calculate() async {
-    final voltage =
-        _parseValue(_voltageController.text);
+    final voltage = _parseValue(_voltageController.text);
 
-    final current =
-        _parseValue(_currentController.text);
+    final current = _parseValue(_currentController.text);
 
-    final resistance =
-        _parseValue(_resistanceController.text);
+    final resistance = _parseValue(_resistanceController.text);
 
     int count = 0;
 
@@ -64,8 +58,7 @@ class _OhmsLawScreenState extends State<OhmsLawScreen> {
     });
 
     try {
-      final result =
-          await _calculatorService.calculateOhmsLaw(
+      final result = await _calculatorService.calculateOhmsLaw(
         voltage: voltage,
         current: current,
         resistance: resistance,
@@ -75,59 +68,38 @@ class _OhmsLawScreenState extends State<OhmsLawScreen> {
         setState(() {
           _statusMessage = result["error"];
         });
-      }
-
-      else if (result.containsKey("voltage")) {
-
-        _voltageController.text =
-            result["voltage"].toStringAsFixed(2);
+      } else if (result.containsKey("voltage")) {
+        _voltageController.text = (result["voltage"] as num)
+            .toDouble()
+            .toStringAsFixed(2);
 
         setState(() {
-          _statusMessage =
-              "✓ Voltage calculated successfully";
+          _statusMessage = "✓ Voltage calculated successfully";
         });
-      }
-
-      else if (result.containsKey("current")) {
-
-        _currentController.text =
-            result["current"].toStringAsFixed(2);
+      } else if (result.containsKey("current")) {
+        _currentController.text = (result["current"] as num)
+            .toDouble()
+            .toStringAsFixed(2);
 
         setState(() {
-          _statusMessage =
-              "✓ Current calculated successfully";
+          _statusMessage = "✓ Current calculated successfully";
         });
-      }
-
-      else if (result.containsKey("resistance")) {
-
-        _resistanceController.text =
-            result["resistance"].toStringAsFixed(2);
+      } else if (result.containsKey("resistance")) {
+        _resistanceController.text = result["resistance"].toStringAsFixed(2);
 
         setState(() {
-          _statusMessage =
-              "✓ Resistance calculated successfully";
+          _statusMessage = "✓ Resistance calculated successfully";
         });
       }
-    }
-
-    catch (e) {
-
+    } catch (e) {
       setState(() {
-
-        _statusMessage =
-            "Error\n$e";
-
+        _statusMessage = "Error\n$e";
       });
-
     }
 
     setState(() {
-
       _loading = false;
-
     });
-
   }
 
   Widget buildField({
@@ -138,30 +110,22 @@ class _OhmsLawScreenState extends State<OhmsLawScreen> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 22),
       child: Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
 
           const SizedBox(height: 8),
 
           TextField(
             controller: controller,
-            keyboardType:
-                const TextInputType.numberWithOptions(
-              decimal: true,
-            ),
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
             decoration: InputDecoration(
               hintText: hint,
               border: OutlineInputBorder(
-                borderRadius:
-                    BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12),
               ),
             ),
           ),
@@ -169,119 +133,129 @@ class _OhmsLawScreenState extends State<OhmsLawScreen> {
       ),
     );
   }
-        @override
-      Widget build(BuildContext context) {
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text("Ohm's Law Calculator"),
-          ),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Icon(
-                  Icons.bolt,
-                  size: 70,
-                  color: Colors.red,
-                ),
 
-                const SizedBox(height: 20),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Ohm's Law Calculator")),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Icon(Icons.bolt, size: 70, color: Colors.red),
 
-                const Text(
-                  "Ohm's Law Calculator",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+            const SizedBox(height: 20),
 
-                const SizedBox(height: 10),
+            const Text(
+              "Ohm's Law Calculator",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+            ),
 
-                const Text(
-                  "Enter any TWO values.\nLeave the value you want calculated blank.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey,
-                  ),
-                ),
+            const SizedBox(height: 10),
 
-                const SizedBox(height: 35),
+            const Text(
+              "Enter any TWO values.\nLeave the value you want calculated blank.",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+            ),
 
-                buildField(
-                  label: "Voltage (V)",
-                  hint: "120",
-                  controller: _voltageController,
-                ),
+            const SizedBox(height: 35),
 
-                buildField(
-                  label: "Current (A)",
-                  hint: "10",
-                  controller: _currentController,
-                ),
+Card(
+  elevation: 4,
+  shadowColor: Colors.black12,
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(20),
+  ),
+  child: Padding(
+    padding: const EdgeInsets.all(24),
+    child: Column(
+  crossAxisAlignment: CrossAxisAlignment.stretch,
+  children: [
 
-                buildField(
-                  label: "Resistance (Ω)",
-                  hint: "12",
-                  controller: _resistanceController,
-                ),
+        
 
-                const SizedBox(height: 10),
+            buildField(
+              label: "Voltage (V)",
+              hint: "Enter voltage",
+              controller: _voltageController,
+            ),
 
-                SizedBox(
-                  height: 55,
-                  child: ElevatedButton(
-                    onPressed: _loading ? null : _calculate,
-                    child: _loading
-                        ? const SizedBox(
-                            height: 24,
-                            width: 24,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 3,
-                              color: Colors.white,
-                            ),
-                          )
-                        : const Text(
-                            "CALCULATE",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                  ),
-                ),
+            buildField(
+              label: "Current (A)",
+              hint: "Enter current",
+              controller: _currentController,
+            ),
 
-                const SizedBox(height: 30),
+            buildField(
+              label: "Resistance (Ω)",
+              hint: "Enter resistance",
+              controller: _resistanceController,
+            ),
 
-                if (_statusMessage.isNotEmpty)
-                  Card(
-                    elevation: 3,
-                    child: Padding(
-                      padding: const EdgeInsets.all(18),
-                      child: Text(
-                        _statusMessage,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
+            const SizedBox(height: 10),
+
+            SizedBox(
+              height: 55,
+              child: ElevatedButton(
+                onPressed: _loading ? null : _calculate,
+                child: _loading
+                    ? const SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 3,
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Text(
+                        "CALCULATE",
+                        style: TextStyle(
                           fontSize: 18,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+      ],
+    ),
+  ),
+),
+
+const SizedBox(height: 30),
+
+            if (_statusMessage.isNotEmpty)
+              Card(
+                elevation: 3,
+                child: Padding(
+                  padding: const EdgeInsets.all(18),
+                  child: Text(
+                    _statusMessage,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                                ],
-            ),
-          ),
-        );
-      }
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
 
-      @override
-      void dispose() {
-        _voltageController.dispose();
-        _currentController.dispose();
-        _resistanceController.dispose();
+  @override
+  void dispose() {
+    _voltageController.dispose();
+    _currentController.dispose();
+    _resistanceController.dispose();
 
-        super.dispose();
-      }
-    }
+    super.dispose();
+  }
+}

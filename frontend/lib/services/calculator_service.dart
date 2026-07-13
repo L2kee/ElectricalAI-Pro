@@ -30,4 +30,28 @@ class CalculatorService {
 
     return jsonDecode(response.body);
   }
+
+  Future<Map<String, dynamic>> calculateVoltageDrop({
+    required double current,
+    required double resistance,
+  }) async {
+    final response = await http.post(
+      Uri.parse("$baseUrl/voltage-drop"),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode({
+        "current": current,
+        "resistance": resistance,
+      }),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception(
+        "Server Error ${response.statusCode}\n${response.body}",
+      );
+    }
+
+    return jsonDecode(response.body);
+  }
 }
