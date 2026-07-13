@@ -11,6 +11,8 @@ import 'ai_screen.dart';
 import 'calculators_screen.dart';
 import 'material_screen.dart';
 import 'settings_screen.dart';
+import 'ohms_law_screen.dart';
+import 'voltage_drop_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -41,7 +43,7 @@ class HomeScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const CalculatorsScreen(),
+                        builder: (_) => const OhmsLawScreen(),
                       ),
                     );
                   },
@@ -52,7 +54,14 @@ class HomeScreen extends StatelessWidget {
                 QuickActionCard(
                   icon: Icons.electric_bolt,
                   title: "Voltage\nDrop",
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const VoltageDropScreen(),
+                      ),
+                    );
+                  },
                 ),
 
                 const SizedBox(width: 18),
