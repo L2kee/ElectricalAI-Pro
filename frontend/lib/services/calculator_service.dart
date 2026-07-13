@@ -54,4 +54,28 @@ class CalculatorService {
 
     return jsonDecode(response.body);
   }
+
+  Future<Map<String, dynamic>> calculateWireAmpacity({
+    required String wireSize,
+    required String temperatureRating,
+  }) async {
+    final response = await http.post(
+      Uri.parse("$baseUrl/wire-ampacity"),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode({
+        "wire_size": wireSize,
+        "temperature_rating": temperatureRating,
+      }),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception(
+        "Server Error ${response.statusCode}\n${response.body}",
+      );
+    }
+
+    return jsonDecode(response.body);
+  }
 }

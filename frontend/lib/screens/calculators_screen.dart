@@ -5,6 +5,7 @@ import '../widgets/feature_card.dart';
 
 import 'ohms_law_screen.dart';
 import 'voltage_drop_screen.dart';
+import 'wire_ampacity_screen.dart';
 
 class CalculatorsScreen extends StatelessWidget {
   const CalculatorsScreen({super.key});
@@ -66,7 +67,14 @@ class CalculatorsScreen extends StatelessWidget {
               iconColor: Colors.deepPurple,
               title: "Wire Ampacity",
               subtitle: "Determine allowable conductor ampacity.",
-              onTap: () => _comingSoon(context),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const WireAmpacityScreen(),
+                  ),
+                );
+              },
             ),
 
             const SizedBox(height: 18),
