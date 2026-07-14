@@ -44,12 +44,11 @@ class FeatureCard extends StatelessWidget {
             ),
             child: Row(
               children: [
-
                 Container(
                   width: 64,
                   height: 64,
                   decoration: BoxDecoration(
-                    color: iconColor.withOpacity(.12),
+                    color: Colors.black.withValues(alpha: 0.08),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -65,7 +64,6 @@ class FeatureCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       Text(
                         title,
                         style: const TextStyle(

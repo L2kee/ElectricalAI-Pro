@@ -6,6 +6,7 @@ import '../widgets/feature_card.dart';
 import 'ohms_law_screen.dart';
 import 'voltage_drop_screen.dart';
 import 'wire_ampacity_screen.dart';
+import 'box_fill_screen.dart';
 
 class CalculatorsScreen extends StatelessWidget {
   const CalculatorsScreen({super.key});
@@ -84,7 +85,14 @@ class CalculatorsScreen extends StatelessWidget {
               iconColor: AppColors.success,
               title: "Box Fill",
               subtitle: "Calculate electrical box fill capacity.",
-              onTap: () => _comingSoon(context),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const BoxFillScreen(),
+                  ),
+                );
+              },
             ),
 
             const SizedBox(height: 18),

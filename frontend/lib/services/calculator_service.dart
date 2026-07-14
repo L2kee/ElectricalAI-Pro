@@ -78,4 +78,30 @@ class CalculatorService {
 
     return jsonDecode(response.body);
   }
+
+  Future<Map<String, dynamic>> calculateBoxFill({
+    required double boxVolume,
+    required int conductorCount,
+    required double conductorAllowance,
+  }) async {
+    final response = await http.post(
+      Uri.parse("$baseUrl/box-fill"),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode({
+        "box_volume": boxVolume,
+        "conductor_count": conductorCount,
+        "conductor_allowance": conductorAllowance,
+      }),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception(
+        "Server Error ${response.statusCode}\n${response.body}",
+      );
+    }
+
+    return jsonDecode(response.body);
+  }
 }

@@ -134,7 +134,7 @@ class _WireAmpacityScreenState extends State<WireAmpacityScreen> {
                     const SizedBox(height: 8),
 
                     DropdownButtonFormField<String>(
-                      value: _selectedWireSize,
+                      initialValue: _selectedWireSize,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -163,7 +163,7 @@ class _WireAmpacityScreenState extends State<WireAmpacityScreen> {
                     const SizedBox(height: 8),
 
                     DropdownButtonFormField<String>(
-                      value: _selectedTemperature,
+                      initialValue: _selectedTemperature,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -262,7 +262,7 @@ class _WireAmpacityScreenState extends State<WireAmpacityScreen> {
                         ),
 
                         Text(
-                          "${_selectedTemperature}°C",
+                          "$_selectedTemperature°C",
                           style: const TextStyle(
                             fontSize: 16,
                             color: Colors.grey,
