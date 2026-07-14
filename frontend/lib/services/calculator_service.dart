@@ -104,4 +104,30 @@ class CalculatorService {
 
     return jsonDecode(response.body);
   }
+
+  Future<Map<String, dynamic>> calculateConduitFill({
+    required double conduitArea,
+    required double wireArea,
+    required int wireCount,
+  }) async {
+    final response = await http.post(
+      Uri.parse("$baseUrl/conduit-fill"),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode({
+        "conduit_area": conduitArea,
+        "wire_area": wireArea,
+        "wire_count": wireCount,
+      }),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception(
+        "Server Error ${response.statusCode}\n${response.body}",
+      );
+    }
+
+    return jsonDecode(response.body);
+  }
 }

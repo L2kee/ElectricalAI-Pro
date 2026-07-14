@@ -7,6 +7,7 @@ import 'ohms_law_screen.dart';
 import 'voltage_drop_screen.dart';
 import 'wire_ampacity_screen.dart';
 import 'box_fill_screen.dart';
+import 'conduit_fill_screen.dart';
 
 class CalculatorsScreen extends StatelessWidget {
   const CalculatorsScreen({super.key});
@@ -102,7 +103,14 @@ class CalculatorsScreen extends StatelessWidget {
               iconColor: Colors.teal,
               title: "Conduit Fill",
               subtitle: "Calculate conduit fill percentage.",
-              onTap: () => _comingSoon(context),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const ConduitFillScreen(),
+                  ),
+                );
+              },
             ),
 
             const SizedBox(height: 18),
