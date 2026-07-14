@@ -130,4 +130,30 @@ class CalculatorService {
 
     return jsonDecode(response.body);
   }
+
+  Future<Map<String, dynamic>> calculateCircuitLoad({
+    double? power,
+    double? voltage,
+    double? current,
+  }) async {
+    final response = await http.post(
+      Uri.parse("$baseUrl/circuit-load"),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode({
+        "power": power,
+        "voltage": voltage,
+        "current": current,
+      }),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception(
+        "Server Error ${response.statusCode}\n${response.body}",
+      );
+    }
+
+    return jsonDecode(response.body);
+  }
 }

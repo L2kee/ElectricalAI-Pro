@@ -8,17 +8,10 @@ import 'voltage_drop_screen.dart';
 import 'wire_ampacity_screen.dart';
 import 'box_fill_screen.dart';
 import 'conduit_fill_screen.dart';
+import 'circuit_load_screen.dart';
 
 class CalculatorsScreen extends StatelessWidget {
   const CalculatorsScreen({super.key});
-
-  void _comingSoon(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("Coming Soon"),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +113,14 @@ class CalculatorsScreen extends StatelessWidget {
               iconColor: Colors.orange,
               title: "Circuit Load",
               subtitle: "Calculate branch circuit load.",
-              onTap: () => _comingSoon(context),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const CircuitLoadScreen(),
+                  ),
+                );
+              },
             ),
           ],
         ),

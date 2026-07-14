@@ -13,6 +13,7 @@ from backend.models.conduit_fill_request import ConduitFillRequest
 from backend.models.box_fill_request import BoxFillRequest
 from backend.models.wire_ampacity_request import WireAmpacityRequest
 from backend.models.material_list_request import MaterialListRequest
+from backend.models.circuit_load_request import CircuitLoadRequest
 
 from backend.services.chat_service import ChatService
 from backend.services.ohms_law_service import OhmsLawService
@@ -21,6 +22,7 @@ from backend.services.conduit_fill_service import ConduitFillService
 from backend.services.box_fill_service import BoxFillService
 from backend.services.wire_ampacity_service import WireAmpacityService
 from backend.services.material_list_service import MaterialListService
+from backend.services.circuit_load_service import CircuitLoadService
 
 app = FastAPI(
     title="ElectricalAI Pro API",
@@ -38,6 +40,7 @@ conduit_fill_service = ConduitFillService()
 box_fill_service = BoxFillService()
 wire_ampacity_service = WireAmpacityService()
 material_list_service = MaterialListService()
+circuit_load_service = CircuitLoadService()
 
 # ============================
 # Routes
@@ -108,3 +111,12 @@ def material_list(request: MaterialListRequest):
             request.project_description
         )
     }
+
+
+@app.post("/circuit-load")
+def circuit_load(request: CircuitLoadRequest):
+    return circuit_load_service.calculate(
+        power=request.power,
+        voltage=request.voltage,
+        current=request.current,
+    )
