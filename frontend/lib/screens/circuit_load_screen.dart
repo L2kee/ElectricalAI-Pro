@@ -135,7 +135,7 @@ class _CircuitLoadScreenState extends State<CircuitLoadScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Icon(Icons.calculate, size: 70, color: Colors.orange),
+            const Icon(Icons.calculate, size: 70, color: Colors.red),
             const SizedBox(height: 20),
             const Text(
               "Circuit Load Calculator",
@@ -232,7 +232,7 @@ class _CircuitLoadScreenState extends State<CircuitLoadScreen> {
                           style: const TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.bold,
-                            color: Colors.orange,
+                            color: Colors.red,
                           ),
                         ),
                       ],
