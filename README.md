@@ -300,7 +300,7 @@ A picture is worth a thousand lines of code.
 
 The screenshots below provide a visual overview of Version 1.0.0 and highlight the application's major features.
 
-> **Tip:** Save your screenshots in the `/screenshots` folder using the filenames shown below. Once they are in place, GitHub will display them automatically.
+
 
 ---
 
@@ -308,7 +308,7 @@ The screenshots below provide a visual overview of Version 1.0.0 and highlight t
 
 The home screen provides quick access to every major feature of ElectricalAI Pro through a clean, modern interface.
 
-markdown
+
 ![Home Screen](screenshots/home.png)
 
 
@@ -318,7 +318,7 @@ markdown
 
 Ask electrical questions using natural language and receive AI-powered responses through the integrated backend.
 
-markdown
+
 ![AI Assistant](screenshots/ai-assistant.png)
 
 
@@ -328,7 +328,7 @@ markdown
 
 Quickly solve for voltage, current, resistance, or power using any two known values.
 
-markdown
+
 ![Ohm's Law](screenshots/ohms-law.png)
 
 
@@ -338,7 +338,7 @@ markdown
 
 Calculate voltage drop using conductor size, circuit length, material type, and electrical load.
 
-markdown
+
 ![Voltage Drop](screenshots/voltage-drop.png)
 
 
@@ -348,7 +348,7 @@ markdown
 
 Determine conductor ampacity using wire size and installation information.
 
-markdown
+
 ![Wire Ampacity](screenshots/wire-ampacity.png)
 
 
@@ -358,7 +358,7 @@ markdown
 
 Calculate minimum electrical box volume based on conductor count and installed devices.
 
-markdown
+
 ![Box Fill](screenshots/box-fill.png)
 
 
@@ -368,7 +368,7 @@ markdown
 
 Determine conduit fill percentages for properly sized conduit installations.
 
-markdown
+
 ![Conduit Fill](screenshots/conduit-fill.png)
 
 
@@ -378,7 +378,7 @@ markdown
 
 Estimate electrical circuit loading for more accurate circuit planning.
 
-markdown
+
 ![Circuit Load](screenshots/circuit-load.png)
 
 
@@ -388,7 +388,7 @@ markdown
 
 Organize project materials and prepare for future estimating capabilities.
 
-markdown
+
 ![Material Lists](screenshots/materials.png)
 
 
@@ -398,7 +398,7 @@ markdown
 
 Customize application preferences that remain available every time the application starts.
 
-markdown
+
 ![Settings](screenshots/settings.png)
 
 
