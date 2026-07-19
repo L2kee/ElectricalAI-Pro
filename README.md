@@ -1,3 +1,8 @@
+
+<p align="center">
+  <img src="assets/images/github-banner.png" alt="ElectricalAI Pro Banner" width="100%">
+</p>
+
 # ⚡ ElectricalAI Pro
 
 <p align="center">
