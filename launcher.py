@@ -29,13 +29,19 @@ import requests
 # Configuration
 # =============================================================================
 
-PROJECT_ROOT = Path(__file__).resolve().parent
+# Detect whether we're running from source or a packaged executable.
+if getattr(sys, "frozen", False):
+    # Running from launcher.exe
+    PROJECT_ROOT = Path(sys.executable).resolve().parent
+else:
+    # Running from launcher.py
+    PROJECT_ROOT = Path(__file__).resolve().parent
 
 BACKEND_DIRECTORY = PROJECT_ROOT / "backend"
 FRONTEND_PATH = PROJECT_ROOT / "frontend"
 
-BACKEND_EXECUTABLE = PROJECT_ROOT / "backend.exe"
-FRONTEND_EXECUTABLE = PROJECT_ROOT / "frontend.exe"
+BACKEND_EXECUTABLE = PROJECT_ROOT / "ElectricalAI-Pro-Backend.exe"
+FRONTEND_EXECUTABLE = PROJECT_ROOT / "ElectricalAI-Pro-UI.exe"
 
 BACKEND_URL = "http://127.0.0.1:8000"
 BACKEND_HEALTH_ENDPOINT = "/openapi.json"
