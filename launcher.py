@@ -41,10 +41,10 @@ BACKEND_DIRECTORY = PROJECT_ROOT / "backend"
 FRONTEND_PATH = PROJECT_ROOT / "frontend"
 
 BACKEND_EXECUTABLE = PROJECT_ROOT / "ElectricalAI-Pro-Backend.exe"
-FRONTEND_EXECUTABLE = PROJECT_ROOT / "ElectricalAI-Pro-UI.exe"
+FRONTEND_EXECUTABLE = PROJECT_ROOT / "frontend.exe"
 
 BACKEND_URL = "http://127.0.0.1:8000"
-BACKEND_HEALTH_ENDPOINT = "/openapi.json"
+BACKEND_HEALTH_ENDPOINT = "/health"
 
 BACKEND_STARTUP_TIMEOUT = 30
 BACKEND_RETRY_INTERVAL = 0.25
@@ -104,6 +104,10 @@ def start_backend(mode: RunMode) -> subprocess.Popen:
             "-m",
             "uvicorn",
             "backend.api.server:app",
+            "--host",
+            "127.0.0.1",
+            "--port",
+            "8000",
             "--reload",
         ]
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import '../services/ai_service.dart';
+import '../widgets/disclaimer_banner.dart';
 
 class AIScreen extends StatefulWidget {
   const AIScreen({super.key});
@@ -9,84 +11,140 @@ class AIScreen extends StatefulWidget {
 }
 
 class _AIScreenState extends State<AIScreen> {
-  final TextEditingController _controller = TextEditingController();
-  final AIService _aiService = AIService();
-
-  String _response = "";
+  final _controller = TextEditingController();
+  final _scroll = ScrollController();
+  final _aiService = AIService();
+  final _messages = <_ChatTurn>[];
   bool _loading = false;
 
   Future<void> _askAI() async {
-    if (_controller.text.trim().isEmpty) return;
+    final text = _controller.text.trim();
+    if (text.isEmpty || _loading) return;
 
     setState(() {
+      _messages.add(_ChatTurn(role: 'user', text: text));
       _loading = true;
-      _response = "";
     });
+    _controller.clear();
 
     try {
-      final answer = await _aiService.askAI(_controller.text.trim());
-
+      final answer = await _aiService.askAI(text);
       setState(() {
-        _response = answer;
+        _messages.add(_ChatTurn(role: 'assistant', text: answer));
       });
     } catch (e) {
       setState(() {
-        _response = "Error: $e";
+        _messages.add(
+          _ChatTurn(
+            role: 'assistant',
+            text:
+                'Could not reach the AI backend at 127.0.0.1:8000.\n'
+                'Start the app with python launcher.py so the API is running, '
+                'and set NVIDIA_API_KEY in a .env file.\n\n$e',
+          ),
+        );
       });
+    } finally {
+      setState(() => _loading = false);
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+      if (_scroll.hasClients) {
+        _scroll.animateTo(
+          _scroll.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeOut,
+        );
+      }
     }
-
-    setState(() {
-      _loading = false;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("AI Assistant"),
-      ),
+      appBar: AppBar(title: const Text('AI Assistant')),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
+            const DisclaimerBanner(compact: true),
+            const SizedBox(height: 16),
+            Expanded(
+              child: _messages.isEmpty
+                  ? const Center(
+                      child: Text(
+                        'Ask an electrical question.\nThe assistant remembers this conversation until you leave the screen.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey, fontSize: 16),
+                      ),
+                    )
+                  : ListView.builder(
+                      controller: _scroll,
+                      itemCount: _messages.length,
+                      itemBuilder: (context, index) {
+                        final turn = _messages[index];
+                        final isUser = turn.role == 'user';
+                        return Align(
+                          alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 12),
+                            padding: const EdgeInsets.all(14),
+                            constraints: const BoxConstraints(maxWidth: 720),
+                            decoration: BoxDecoration(
+                              color: isUser ? const Color(0xFFC62828) : Colors.white,
+                              borderRadius: BorderRadius.circular(14),
+                              boxShadow: const [
+                                BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 2)),
+                              ],
+                            ),
+                            child: SelectableText(
+                              turn.text,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: isUser ? Colors.white : Colors.black87,
+                                height: 1.4,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+            ),
+            if (_loading) const LinearProgressIndicator(),
+            const SizedBox(height: 12),
             TextField(
               controller: _controller,
-              decoration: const InputDecoration(
-                labelText: "Ask a question",
-                border: OutlineInputBorder(),
-              ),
               minLines: 1,
               maxLines: 4,
+              onSubmitted: (_) => _askAI(),
+              decoration: const InputDecoration(
+                labelText: 'Ask a question',
+                border: OutlineInputBorder(),
+              ),
             ),
-
-            const SizedBox(height: 20),
-
+            const SizedBox(height: 12),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: _loading ? null : _askAI,
-                child: const Text("Ask AI"),
+                child: const Text('Ask AI'),
               ),
             ),
-
-            const SizedBox(height: 30),
-
-            if (_loading)
-              const CircularProgressIndicator(),
-
-            if (!_loading)
-              Expanded(
-                child: SingleChildScrollView(
-                  child: SelectableText(
-                    _response,
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                ),
-              ),
           ],
         ),
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _scroll.dispose();
+    super.dispose();
+  }
+}
+
+class _ChatTurn {
+  const _ChatTurn({required this.role, required this.text});
+
+  final String role;
+  final String text;
 }

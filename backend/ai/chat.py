@@ -1,27 +1,35 @@
-"""
-ElectricalAI Pro
+"""AI chat wrapper."""
 
-AI Chat Module
-"""
+from __future__ import annotations
+
+from openai import APIError, APITimeoutError, OpenAIError
 
 from backend.ai.client import AIClient
+from backend.services.errors import CalculatorError
 
 
 class AIChat:
-    """Handles AI chat requests."""
+    """Sends chat completions to the configured NVIDIA model."""
 
     def __init__(self):
-        self.client = AIClient().get_client()
+        self._ai = AIClient()
+        self.client = self._ai.get_client()
+        self.model = self._ai.model
 
-    def ask(self, messages):
-        """Send messages to the NVIDIA AI model."""
+    def ask(self, messages, temperature: float = 0.3, max_tokens: int = 1024) -> str:
+        try:
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=messages,
+                max_tokens=max_tokens,
+                temperature=temperature,
+                top_p=0.9,
+            )
+        except (APITimeoutError, APIError, OpenAIError) as exc:
+            raise CalculatorError(f"AI request failed: {exc}") from exc
 
-        response = self.client.chat.completions.create(
-            model="google/diffusiongemma-26b-a4b-it",
-            messages=messages,
-            max_tokens=1024,
-            temperature=1.0,
-            top_p=0.95,
-        )
+        choices = getattr(response, "choices", None) or []
+        if not choices or not choices[0].message or not choices[0].message.content:
+            raise CalculatorError("The AI returned an empty response.")
 
-        return response.choices[0].message.content
+        return choices[0].message.content

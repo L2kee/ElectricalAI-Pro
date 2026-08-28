@@ -8,6 +8,8 @@ venv/
 
 # Environment Variables
 .env
+.env.*
+!.env.example
 
 # Python Cache
 __pycache__/
@@ -26,6 +28,13 @@ release/
 # --------------------------------------------------
 
 frontend/build/
+
+# --------------------------------------------------
+# Installer binaries (build these locally)
+# --------------------------------------------------
+
+installer/*.exe
+*.exe
 
 # --------------------------------------------------
 # VS Code

@@ -1,8 +1,4 @@
-"""
-ElectricalAI Pro
-
-Circuit Load request model.
-"""
+"""Circuit Load request model."""
 
 from typing import Optional
 
@@ -13,3 +9,4 @@ class CircuitLoadRequest(BaseModel):
     power: Optional[float] = None
     voltage: Optional[float] = None
     current: Optional[float] = None
+    continuous: bool = False
