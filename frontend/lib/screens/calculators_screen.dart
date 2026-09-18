@@ -9,6 +9,7 @@ import 'wire_ampacity_screen.dart';
 import 'box_fill_screen.dart';
 import 'conduit_fill_screen.dart';
 import 'circuit_load_screen.dart';
+import 'motor_flc_screen.dart';
 
 class CalculatorsScreen extends StatelessWidget {
   const CalculatorsScreen({super.key});
@@ -118,6 +119,23 @@ class CalculatorsScreen extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (_) => const CircuitLoadScreen(),
+                  ),
+                );
+              },
+            ),
+
+            const SizedBox(height: 18),
+
+            FeatureCard(
+              icon: Icons.settings_input_component,
+              iconColor: Colors.indigo,
+              title: "Motor FLC",
+              subtitle: "Look up motor full-load current by HP and voltage.",
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const MotorFlcScreen(),
                   ),
                 );
               },

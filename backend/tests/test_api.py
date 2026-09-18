@@ -59,3 +59,21 @@ def test_box_fill_ok():
     )
     assert response.status_code == 200
     assert response.json()["box_is_large_enough"] is True
+
+
+def test_motor_flc_ok():
+    response = client.post(
+        "/motor-flc",
+        json={"horsepower": "10", "voltage": "230", "phase": "three"},
+    )
+    assert response.status_code == 200
+    assert response.json()["full_load_current"] == 28.0
+
+
+def test_motor_flc_bad_input():
+    response = client.post(
+        "/motor-flc",
+        json={"horsepower": "10", "voltage": "120", "phase": "three"},
+    )
+    assert response.status_code == 400
+    assert "error" in response.json()

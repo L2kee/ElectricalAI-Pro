@@ -6,6 +6,17 @@ This project follows the principles of **Keep a Changelog**, with entries organi
 
 ---
 
+# [Unreleased]
+
+## Added
+
+- Motor Full-Load Current calculator: single- and three-phase FLC lookup by
+  horsepower and system voltage, plus the 125% minimum branch-circuit
+  conductor ampacity, in both Dart (on-device) and the FastAPI backend
+  (`POST /motor-flc`)
+
+---
+
 # [1.0.1] - 2026-08-28
 
 Foundation pass: calculators that match field workflow, offline math in the

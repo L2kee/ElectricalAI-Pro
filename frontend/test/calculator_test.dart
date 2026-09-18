@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:frontend/calculators/box_fill.dart';
 import 'package:frontend/calculators/circuit_load.dart';
 import 'package:frontend/calculators/conduit_fill.dart';
+import 'package:frontend/calculators/motor_flc.dart';
 import 'package:frontend/calculators/ohms_law.dart';
 import 'package:frontend/calculators/tables.dart';
 import 'package:frontend/calculators/voltage_drop.dart';
@@ -72,6 +73,24 @@ void main() {
   test('rejects zero current', () {
     expect(
       () => calculateOhmsLaw(voltage: 120, current: 0),
+      throwsA(isA<CalculatorException>()),
+    );
+  });
+
+  test('motor FLC three-phase 10 HP 230V', () {
+    final result = calculateMotorFlc(horsepower: '10', voltage: '230', phase: 'three');
+    expect(result.fullLoadCurrent, 28.0);
+    expect(result.minConductorAmpacityAmps, 35.0);
+  });
+
+  test('motor FLC single-phase 5 HP 115V', () {
+    final result = calculateMotorFlc(horsepower: '5', voltage: '115', phase: 'single');
+    expect(result.fullLoadCurrent, 56.0);
+  });
+
+  test('motor FLC rejects unsupported voltage', () {
+    expect(
+      () => calculateMotorFlc(horsepower: '10', voltage: '120', phase: 'three'),
       throwsA(isA<CalculatorException>()),
     );
   });
