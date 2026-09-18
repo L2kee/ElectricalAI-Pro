@@ -36,6 +36,13 @@ class MotorFlcServiceTests(unittest.TestCase):
         with self.assertRaises(CalculatorError):
             self.service.calculate("10", "230", "two")
 
+    def test_min_conductor_ampacity_rounds_half_up_on_ties(self):
+        # 2.5 A * 1.25 = 3.125 exactly; must round to 3.13, matching the
+        # Dart on-device app (round-half-away-from-zero), not Python's
+        # default round-half-to-even (which would give 3.12).
+        result = self.service.calculate("1/6", "200", "single")
+        self.assertEqual(result["min_conductor_ampacity_amps"], 3.13)
+
 
 if __name__ == "__main__":
     unittest.main()

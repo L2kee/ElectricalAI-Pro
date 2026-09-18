@@ -31,21 +31,11 @@ TransformerSizingResult calculateTransformerSizing({
     throw CalculatorException('Primary and secondary voltage must be greater than zero.');
   }
 
-  final kind = phase.trim().toLowerCase();
-  double divisorPrimary;
-  double divisorSecondary;
-  String phaseLabel;
-  if (kind == 'single' || kind == '1' || kind == '1ph' || kind == 'single-phase') {
-    divisorPrimary = primaryVoltage;
-    divisorSecondary = secondaryVoltage;
-    phaseLabel = 'single-phase';
-  } else if (kind == 'three' || kind == '3' || kind == '3ph' || kind == 'three-phase') {
-    divisorPrimary = primaryVoltage * threePhaseFactor;
-    divisorSecondary = secondaryVoltage * threePhaseFactor;
-    phaseLabel = 'three-phase';
-  } else {
-    throw CalculatorException('Phase must be single or three.');
-  }
+  final kind = normalizePhase(phase);
+  final factor = kind == 'single' ? 1.0 : threePhaseFactor;
+  final divisorPrimary = primaryVoltage * factor;
+  final divisorSecondary = secondaryVoltage * factor;
+  final phaseLabel = kind == 'single' ? 'single-phase' : 'three-phase';
 
   final va = kva * 1000.0;
 

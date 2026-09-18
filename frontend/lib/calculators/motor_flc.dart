@@ -19,18 +19,10 @@ MotorFlcResult calculateMotorFlc({
   required String voltage,
   String phase = 'three',
 }) {
-  final kind = phase.trim().toLowerCase();
-  Map<String, Map<String, double>> table;
-  String phaseLabel;
-  if (kind == 'single' || kind == '1' || kind == '1ph' || kind == 'single-phase') {
-    table = ElectricalTables.motorFlcSinglePhase;
-    phaseLabel = 'single-phase';
-  } else if (kind == 'three' || kind == '3' || kind == '3ph' || kind == 'three-phase') {
-    table = ElectricalTables.motorFlcThreePhase;
-    phaseLabel = 'three-phase';
-  } else {
-    throw CalculatorException('Phase must be single or three.');
-  }
+  final kind = normalizePhase(phase);
+  final table =
+      kind == 'single' ? ElectricalTables.motorFlcSinglePhase : ElectricalTables.motorFlcThreePhase;
+  final phaseLabel = kind == 'single' ? 'single-phase' : 'three-phase';
 
   final hp = horsepower.trim();
   final row = table[hp];

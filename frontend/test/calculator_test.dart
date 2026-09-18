@@ -124,4 +124,21 @@ void main() {
       throwsA(isA<CalculatorException>()),
     );
   });
+
+  test('motor FLC min conductor ampacity rounds exact tie up', () {
+    // 2.5 A * 1.25 = 3.125 exactly; must round to 3.13 to match the
+    // backend's round-half-up, not down to 3.12.
+    final result = calculateMotorFlc(horsepower: '1/6', voltage: '200', phase: 'single');
+    expect(result.minConductorAmpacityAmps, 3.13);
+  });
+
+  test('normalizePhase accepts aliases and rejects unknown', () {
+    expect(normalizePhase('Single'), 'single');
+    expect(normalizePhase('three-phase'), 'three');
+    expect(normalizePhase('3'), 'three');
+    expect(
+      () => normalizePhase('two'),
+      throwsA(isA<CalculatorException>()),
+    );
+  });
 }

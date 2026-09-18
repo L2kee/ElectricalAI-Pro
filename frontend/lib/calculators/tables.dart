@@ -221,3 +221,13 @@ class CalculatorException implements Exception {
   @override
   String toString() => message;
 }
+
+/// Returns 'single' or 'three' for a phase string, or throws CalculatorException.
+String normalizePhase(String phase) {
+  final kind = phase.trim().toLowerCase();
+  const singleAliases = {'single', '1', '1ph', 'single-phase'};
+  const threeAliases = {'three', '3', '3ph', 'three-phase'};
+  if (singleAliases.contains(kind)) return 'single';
+  if (threeAliases.contains(kind)) return 'three';
+  throw CalculatorException('Phase must be single or three.');
+}
