@@ -86,23 +86,26 @@ class DashboardHeader extends StatelessWidget {
           ),
         ),
 
-        Container(
-          width: 56,
-          height: 56,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(18),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 12,
-                offset: Offset(0, 5),
-              ),
-            ],
-          ),
-          child: const Icon(
-            Icons.notifications_none,
-            color: AppColors.primary,
+        Tooltip(
+          message: 'Calculators work offline. AI needs the local backend.',
+          child: Container(
+            width: 56,
+            height: 56,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(18),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 12,
+                  offset: Offset(0, 5),
+                ),
+              ],
+            ),
+            child: const Icon(
+              Icons.info_outline,
+              color: AppColors.primary,
+            ),
           ),
         ),
       ],

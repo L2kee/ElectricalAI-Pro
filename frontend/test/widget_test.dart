@@ -8,6 +8,7 @@ void main() {
     await tester.pumpWidget(const ElectricalAIProApp());
 
     expect(find.byType(MaterialApp), findsOneWidget);
-    expect(find.text('ElectricalAI Pro'), findsOneWidget);
+    expect(find.textContaining('ElectricalAI'), findsWidgets);
+    expect(find.text('PRO'), findsOneWidget);
   });
 }

@@ -1,6 +1,7 @@
 import unittest
 
 from backend.services.circuit_load_service import CircuitLoadService
+from backend.services.errors import CalculatorError
 
 
 class CircuitLoadServiceTests(unittest.TestCase):
@@ -9,23 +10,30 @@ class CircuitLoadServiceTests(unittest.TestCase):
 
     def test_calculates_current_from_power_and_voltage(self):
         result = self.service.calculate(power=2400, voltage=120)
-
         self.assertEqual(result["current"], 20.0)
+        self.assertEqual(result["suggested_breaker_amps"], 20)
 
     def test_calculates_power_from_voltage_and_current(self):
         result = self.service.calculate(voltage=120, current=10)
-
         self.assertEqual(result["power"], 1200.0)
 
     def test_calculates_voltage_from_power_and_current(self):
         result = self.service.calculate(power=2400, current=20)
-
         self.assertEqual(result["voltage"], 120.0)
 
-    def test_requires_exactly_two_values(self):
-        result = self.service.calculate()
+    def test_continuous_applies_125_percent(self):
+        result = self.service.calculate(power=1920, voltage=120, continuous=True)
+        self.assertEqual(result["current"], 16.0)
+        self.assertEqual(result["design_current"], 20.0)
+        self.assertEqual(result["suggested_breaker_amps"], 20)
 
-        self.assertEqual(result["error"], "Please provide exactly two values.")
+    def test_requires_exactly_two_values(self):
+        with self.assertRaises(CalculatorError):
+            self.service.calculate()
+
+    def test_rejects_zero(self):
+        with self.assertRaises(CalculatorError):
+            self.service.calculate(power=1200, voltage=0)
 
 
 if __name__ == "__main__":

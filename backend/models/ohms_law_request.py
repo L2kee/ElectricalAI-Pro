@@ -1,8 +1,4 @@
-"""
-ElectricalAI Pro
-
-Ohm's Law request model.
-"""
+"""Ohm's Law request model."""
 
 from typing import Optional
 

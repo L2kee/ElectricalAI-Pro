@@ -6,6 +6,42 @@ This project follows the principles of **Keep a Changelog**, with entries organi
 
 ---
 
+# [1.0.1] - 2026-08-28
+
+Foundation pass: calculators that match field workflow, offline math in the
+UI, a backend that can fail cleanly, and a Windows packaging path that
+includes the API instead of only the Flutter shell.
+
+## Added
+
+- Voltage drop from wire size, material, one-way length, load, voltage, and 1φ/3φ
+- Box fill counts for device yokes, internal clamps, and equipment grounds
+- Conduit fill from EMT / PVC-40 / RMC trade size and THHN conductor count
+- Copper and aluminum ampacity, plus typical small-conductor OCPD notes
+- Circuit load continuous 125% and next standard breaker size
+- In-app planning-aid disclaimer (toggled by Settings → Enable hints)
+- Chat conversation history and structured material lists
+- Backend and Flutter unit tests for every calculator
+- `.env.example` and a `/health` endpoint
+
+## Changed
+
+- Calculators run in Dart on the device; FastAPI mirrors the same math
+- Invalid calculator input now returns HTTP 400 instead of 200 + `error`
+- NVIDIA chat uses a chat/instruct model at temperature 0.3
+- `requirements.txt` is UTF-8 and lists only packages the API needs
+- Installer and `build_release.py` ship launcher + backend + UI together
+- Installer binaries are no longer committed
+
+## Fixed
+
+- Divide-by-zero and non-positive values in Ohm's law and circuit load
+- Widget test looking for a title string the home screen does not show
+- Settings “Enable hints” had no effect on the UI
+- Prototype `app.py` left in the repo root
+
+---
+
 # [1.0.0] - 2026-07-17
 
 ## 🎉 Initial Public Release

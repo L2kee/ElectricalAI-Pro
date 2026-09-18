@@ -1,13 +1,10 @@
-"""
-ElectricalAI Pro
+"""Conduit Fill request model."""
 
-Conduit Fill request model.
-"""
-
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class ConduitFillRequest(BaseModel):
-    conduit_area: float
-    wire_area: float
-    wire_count: int
+    conduit_type: str
+    trade_size: str
+    wire_size: str
+    wire_count: int = Field(..., gt=0)

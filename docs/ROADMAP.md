@@ -1,64 +1,53 @@
-# ⚡ ElectricalAI Pro Roadmap
+# ElectricalAI Pro Roadmap
 
 ## Phase 1 – Foundation ✅
 
-- [x] Install Python
-- [x] Install VS Code
-- [x] Create Virtual Environment
-- [x] Install Required Packages
-- [x] Configure Git
-- [x] Connect NVIDIA API
-- [x] First Successful AI Response
+- [x] Python + Flutter project
+- [x] FastAPI backend
+- [x] NVIDIA chat integration
+- [x] Windows desktop UI
+- [x] Development launcher
 
----
+## Phase 2 – Core application ✅ (1.0.1)
 
-## Phase 2 – Core Application 🚧
+- [x] Project architecture
+- [x] Flutter frontend
+- [x] Python backend
+- [x] Frontend ↔ backend for AI
+- [x] AI chat interface with conversation history
+- [x] Settings page (hints persist and hide disclaimers)
+- [x] Offline field calculators in Dart
 
-- [ ] Create Project Architecture
-- [ ] Build Flutter Frontend
-- [ ] Build Python Backend
-- [ ] Connect Frontend to Backend
-- [ ] AI Chat Interface
-- [ ] Conversation History
-- [ ] Settings Page
+## Phase 3 – Electrical tools
 
----
+- [x] Ohm's Law calculator
+- [x] Voltage drop (wire size, length, material, phase)
+- [x] Box fill (yokes, clamps, grounds)
+- [x] Conduit fill (raceway type/size + THHN)
+- [x] Wire ampacity (copper/aluminum + small-conductor note)
+- [x] Circuit load (optional continuous 125%)
+- [ ] Motor FLA calculator
+- [ ] Transformer calculator
 
-## Phase 3 – Electrical Tools
+## Phase 4 – AI features
 
-- [ ] Ohm's Law Calculator
-- [ ] Voltage Drop Calculator
-- [ ] Box Fill Calculator
-- [ ] Conduit Fill Calculator
-- [ ] Motor FLA Calculator
-- [ ] Transformer Calculator
+- [x] Material list generator (structured JSON)
+- [ ] Wiring diagram analysis
+- [ ] PDF search
+- [ ] Project notes
+- [ ] Saved calculations
 
----
+## Phase 5 – Mobile
 
-## Phase 4 – AI Features
+- [ ] Android
+- [ ] iPhone
+- [ ] Camera integration
+- [ ] Voice assistant
+- [ ] Offline AI
 
-- [ ] Material List Generator
-- [ ] Wiring Diagram Analysis
-- [ ] PDF Search
-- [ ] Project Notes
-- [ ] AI Troubleshooting Assistant
+## Phase 6 – Professional release
 
----
-
-## Phase 5 – Mobile Features
-
-- [ ] Android App
-- [ ] iPhone App
-- [ ] Camera Integration
-- [ ] Voice Assistant
-- [ ] Offline Mode
-
----
-
-## Phase 6 – Professional Release
-
-- [ ] GitHub Repository
-- [ ] Windows Installer
-- [ ] Google Play Store
-- [ ] Apple App Store
-- [ ] Version 1.0 Release
+- [x] GitHub repository
+- [ ] Windows installer that includes backend + launcher (script ready)
+- [ ] Store listings
+- [ ] Version 1.1 field-hardened release

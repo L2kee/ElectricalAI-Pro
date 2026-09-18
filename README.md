@@ -17,9 +17,9 @@
 
 **ElectricalAI Pro** is an AI-powered Windows desktop application that combines intelligent electrical assistance, professional-grade calculators, and productivity tools into one modern application.
 
-Built with **Flutter**, **Dart**, **FastAPI**, **Python**, and **Google Diffusion Gemma (NVIDIA Build API)**.
+Built with **Flutter**, **Dart**, **FastAPI**, **Python**, and the **NVIDIA Build API**.
 
-Version **1.0.0** is available for **Windows**, with **Android** and **iPhone** versions planned for future releases.
+Version **1.0.1** is available for **Windows**, with **Android** and **iPhone** versions planned for future releases.
 
 </p>
 
@@ -137,31 +137,31 @@ Quickly calculate voltage, current, resistance, or power by entering any two kno
 
 ✅ Voltage Drop Calculator
 
-Estimate voltage drop using conductor size, circuit length, material type, current, and system voltage to help design more efficient electrical installations.
+Estimate voltage drop using conductor size, one-way length, copper or aluminum, load current, system voltage, and single- or three-phase.
 
 ---
 
 ✅ Wire Ampacity Calculator
 
-Determine conductor ampacity based on wire size and installation characteristics.
+Look up copper or aluminum ampacity by size and 60/75/90 °C rating, with a typical small-conductor overcurrent note.
 
 ---
 
 ✅ Box Fill Calculator
 
-Calculate the minimum required electrical box volume based on conductor count, devices, fittings, and grounding conductors.
+Calculate required box volume from conductor size/count, device yokes, internal clamps, and equipment grounds.
 
 ---
 
 ✅ Conduit Fill Calculator
 
-Determine conduit fill percentages to help ensure conduit sizing complies with industry standards.
+Estimate fill for EMT, PVC Schedule 40, or RMC using trade size and THHN conductor count (53 / 31 / 40% limits).
 
 ---
 
 ✅ Circuit Load Calculator
 
-Calculate total connected load and assist with planning electrical circuits more accurately.
+Solve P = V × I, optionally apply 125% for continuous loads, and suggest the next standard breaker size.
 
 ---
 
@@ -221,7 +221,7 @@ ElectricalAI Pro combines several modern technologies to create a scalable deskt
 | **Python** | Backend business logic |
 | **FastAPI** | REST API services |
 | **Uvicorn** | High-performance ASGI server |
-| **Google Diffusion Gemma (NVIDIA Build API)** | AI-powered assistant |
+| **NVIDIA Build API** | AI-powered assistant |
 | **SharedPreferences** | Persistent application settings |
 | **Git & GitHub** | Version control and source management |
 | **Visual Studio Code** | Primary development environment |
@@ -237,21 +237,14 @@ ElectricalAI Pro follows a modern client-server architecture that separates the 
 ```text
                   launcher.py
                        │
-                       ▼
-            FastAPI REST API Backend
-                       │
-             Wait for backend readiness
-                       │
-                       ▼
-        Flutter Desktop Application
-                       │
           ┌────────────┴────────────┐
           ▼                         ▼
-Electrical Calculators       AI Assistant
+   FastAPI backend              Flutter UI
+   (AI + calculator API)        (offline calculators)
           │                         │
           └────────────┬────────────┘
                        ▼
-               NVIDIA Build API
+               NVIDIA Build API (chat / materials only)
 ```
 
 This architecture keeps responsibilities clearly separated.
@@ -275,8 +268,7 @@ ElectricalAI-Pro
 ├── backend
 │   ├── ai
 │   ├── api
-│   ├── calculators
-│   ├── database
+│   ├── data
 │   ├── models
 │   ├── services
 │   ├── tests
@@ -491,10 +483,17 @@ flutter analyze
 
 ## Backend
 
-Run the backend test suite.
+From the project root:
 
 ```bash
-pytest
+python -m pytest
+```
+
+## Flutter calculators
+
+```bash
+cd frontend
+flutter test
 ```
 
 ---
@@ -505,18 +504,20 @@ ElectricalAI Pro exposes several REST endpoints through the FastAPI backend.
 
 | Endpoint | Purpose |
 |----------|---------|
-| `/chat` | AI Assistant |
-| `/ohms-law` | Ohm's Law Calculator |
-| `/voltage-drop` | Voltage Drop Calculator |
-| `/wire-ampacity` | Wire Ampacity Calculator |
-| `/box-fill` | Box Fill Calculator |
-| `/conduit-fill` | Conduit Fill Calculator |
-| `/circuit-load` | Circuit Load Calculator |
+| `/health` | Backend readiness |
+| `/chat` | AI Assistant (conversation history) |
+| `/material-list` | Structured material list |
+| `/ohms-law` | Ohm's Law |
+| `/voltage-drop` | Voltage drop |
+| `/wire-ampacity` | Wire ampacity |
+| `/box-fill` | Box fill |
+| `/conduit-fill` | Conduit fill |
+| `/circuit-load` | Circuit load |
 
 Every endpoint is automatically documented through FastAPI's built-in Swagger interface, making development, testing, and future expansion significantly easier.
 
 ---
-# 🌟 Version 1.0.0 Highlights
+# 🌟 Version 1.0.1 Highlights
 
 ElectricalAI Pro Version **1.0.0** represents the first public release of the project and establishes the foundation for future development.
 

@@ -1,7 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+
+import '../services/ai_service.dart';
+import '../widgets/disclaimer_banner.dart';
 
 class MaterialScreen extends StatefulWidget {
   const MaterialScreen({super.key});
@@ -11,47 +11,39 @@ class MaterialScreen extends StatefulWidget {
 }
 
 class _MaterialScreenState extends State<MaterialScreen> {
-  final TextEditingController _projectController = TextEditingController();
+  final _projectController = TextEditingController();
+  final _aiService = AIService();
   bool _loading = false;
-  String _result = '';
+  String _error = '';
+  MaterialListResult? _result;
 
   Future<void> _generateMaterialList() async {
     final description = _projectController.text.trim();
     if (description.isEmpty) {
       setState(() {
-        _result = 'Please describe the project first.';
+        _error = 'Please describe the project first.';
+        _result = null;
       });
       return;
     }
 
     setState(() {
       _loading = true;
-      _result = '';
+      _error = '';
     });
 
     try {
-      final response = await http.post(
-        Uri.parse('http://127.0.0.1:8000/material-list'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'project_description': description}),
-      );
-
-      if (response.statusCode != 200) {
-        throw Exception('Server Error ${response.statusCode}');
-      }
-
-      final body = jsonDecode(response.body);
-      setState(() {
-        _result = (body['materials'] as String).trim();
-      });
+      final result = await _aiService.generateMaterials(description);
+      setState(() => _result = result);
     } catch (e) {
       setState(() {
-        _result = 'Unable to generate materials right now.\n$e';
+        _result = null;
+        _error =
+            'Unable to generate materials. Start the backend with python launcher.py '
+            'and set NVIDIA_API_KEY.\n$e';
       });
     } finally {
-      setState(() {
-        _loading = false;
-      });
+      setState(() => _loading = false);
     }
   }
 
@@ -73,16 +65,19 @@ class _MaterialScreenState extends State<MaterialScreen> {
             ),
             const SizedBox(height: 10),
             const Text(
-              'Describe your electrical project and generate a practical material list.',
+              'Describe the job. The assistant returns a structured takeoff you can scan on site.',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 15, color: Colors.grey),
             ),
+            const SizedBox(height: 16),
+            const DisclaimerBanner(compact: true),
             const SizedBox(height: 24),
             TextField(
               controller: _projectController,
               maxLines: 6,
               decoration: InputDecoration(
-                hintText: 'Example: 3-light branch circuit, 20A breaker, 1-gang box, 12 AWG wire',
+                hintText:
+                    'Example: 3-light branch circuit, 20A breaker, 1-gang boxes, 12 AWG NM, 50 ft run',
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
               ),
             ),
@@ -97,22 +92,51 @@ class _MaterialScreenState extends State<MaterialScreen> {
                     )
                   : const Text('Generate Material List'),
             ),
-            const SizedBox(height: 24),
-            if (_result.isNotEmpty)
+            if (_error.isNotEmpty) ...[
+              const SizedBox(height: 24),
+              Text(_error, style: const TextStyle(color: Colors.red, height: 1.4)),
+            ],
+            if (_result != null) ...[
+              const SizedBox(height: 24),
               Card(
                 elevation: 3,
                 child: Padding(
-                  padding: const EdgeInsets.all(18),
-                  child: Text(
-                    _result,
-                    style: const TextStyle(fontSize: 16, height: 1.5),
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    children: [
+                      for (final item in _result!.items)
+                        ListTile(
+                          title: Text(item.item),
+                          subtitle: item.notes.isEmpty ? null : Text(item.notes),
+                          trailing: Text(
+                            '${_formatQty(item.qty)} ${item.unit}',
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
               ),
+              if (_result!.assumptions.isNotEmpty) ...[
+                const SizedBox(height: 16),
+                const Text('Assumptions', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                const SizedBox(height: 8),
+                for (final assumption in _result!.assumptions)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 6),
+                    child: Text('• $assumption'),
+                  ),
+              ],
+            ],
           ],
         ),
       ),
     );
+  }
+
+  String _formatQty(double qty) {
+    if (qty == qty.roundToDouble()) return qty.toStringAsFixed(0);
+    return qty.toStringAsFixed(2);
   }
 
   @override
