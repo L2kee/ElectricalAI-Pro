@@ -10,6 +10,7 @@ import 'box_fill_screen.dart';
 import 'conduit_fill_screen.dart';
 import 'circuit_load_screen.dart';
 import 'motor_flc_screen.dart';
+import 'transformer_sizing_screen.dart';
 
 class CalculatorsScreen extends StatelessWidget {
   const CalculatorsScreen({super.key});
@@ -136,6 +137,23 @@ class CalculatorsScreen extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (_) => const MotorFlcScreen(),
+                  ),
+                );
+              },
+            ),
+
+            const SizedBox(height: 18),
+
+            FeatureCard(
+              icon: Icons.electrical_services,
+              iconColor: Colors.blueGrey,
+              title: "Transformer Sizing",
+              subtitle: "Get primary/secondary FLA from rated kVA.",
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const TransformerSizingScreen(),
                   ),
                 );
               },

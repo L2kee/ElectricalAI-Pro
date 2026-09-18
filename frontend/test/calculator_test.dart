@@ -5,6 +5,7 @@ import 'package:frontend/calculators/conduit_fill.dart';
 import 'package:frontend/calculators/motor_flc.dart';
 import 'package:frontend/calculators/ohms_law.dart';
 import 'package:frontend/calculators/tables.dart';
+import 'package:frontend/calculators/transformer_sizing.dart';
 import 'package:frontend/calculators/voltage_drop.dart';
 import 'package:frontend/calculators/wire_ampacity.dart';
 
@@ -91,6 +92,35 @@ void main() {
   test('motor FLC rejects unsupported voltage', () {
     expect(
       () => calculateMotorFlc(horsepower: '10', voltage: '120', phase: 'three'),
+      throwsA(isA<CalculatorException>()),
+    );
+  });
+
+  test('transformer sizing three-phase 75kVA 480 to 208', () {
+    final result = calculateTransformerSizing(
+      kva: 75,
+      primaryVoltage: 480,
+      secondaryVoltage: 208,
+      phase: 'three',
+    );
+    expect(result.primaryFla, 90.21);
+    expect(result.secondaryFla, 208.19);
+  });
+
+  test('transformer sizing single-phase 25kVA 240 to 120', () {
+    final result = calculateTransformerSizing(
+      kva: 25,
+      primaryVoltage: 240,
+      secondaryVoltage: 120,
+      phase: 'single',
+    );
+    expect(result.primaryFla, 104.17);
+    expect(result.secondaryFla, 208.33);
+  });
+
+  test('transformer sizing rejects zero kVA', () {
+    expect(
+      () => calculateTransformerSizing(kva: 0, primaryVoltage: 480, secondaryVoltage: 208),
       throwsA(isA<CalculatorException>()),
     );
   });

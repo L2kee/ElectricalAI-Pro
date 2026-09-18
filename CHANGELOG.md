@@ -14,6 +14,9 @@ This project follows the principles of **Keep a Changelog**, with entries organi
   horsepower and system voltage, plus the 125% minimum branch-circuit
   conductor ampacity, in both Dart (on-device) and the FastAPI backend
   (`POST /motor-flc`)
+- Transformer Sizing calculator: primary/secondary full-load amperes from
+  rated kVA and voltage for single- and three-phase transformers, in both
+  Dart (on-device) and the FastAPI backend (`POST /transformer-sizing`)
 
 ---
 

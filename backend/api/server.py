@@ -15,6 +15,7 @@ from backend.models.conduit_fill_request import ConduitFillRequest
 from backend.models.material_list_request import MaterialListRequest
 from backend.models.motor_flc_request import MotorFlcRequest
 from backend.models.ohms_law_request import OhmsLawRequest
+from backend.models.transformer_sizing_request import TransformerSizingRequest
 from backend.models.voltage_drop_request import VoltageDropRequest
 from backend.models.wire_ampacity_request import WireAmpacityRequest
 from backend.services.box_fill_service import BoxFillService
@@ -23,6 +24,7 @@ from backend.services.conduit_fill_service import ConduitFillService
 from backend.services.errors import CalculatorError
 from backend.services.motor_flc_service import MotorFlcService
 from backend.services.ohms_law_service import OhmsLawService
+from backend.services.transformer_sizing_service import TransformerSizingService
 from backend.services.voltage_drop_service import VoltageDropService
 from backend.services.wire_ampacity_service import WireAmpacityService
 
@@ -46,6 +48,7 @@ box_fill_service = BoxFillService()
 wire_ampacity_service = WireAmpacityService()
 circuit_load_service = CircuitLoadService()
 motor_flc_service = MotorFlcService()
+transformer_sizing_service = TransformerSizingService()
 
 _chat_service = None
 _material_list_service = None
@@ -163,5 +166,15 @@ def motor_flc(request: MotorFlcRequest):
     return motor_flc_service.calculate(
         horsepower=request.horsepower,
         voltage=request.voltage,
+        phase=request.phase,
+    )
+
+
+@app.post("/transformer-sizing")
+def transformer_sizing(request: TransformerSizingRequest):
+    return transformer_sizing_service.calculate(
+        kva=request.kva,
+        primary_voltage=request.primary_voltage,
+        secondary_voltage=request.secondary_voltage,
         phase=request.phase,
     )

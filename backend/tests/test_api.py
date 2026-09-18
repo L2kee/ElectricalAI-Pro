@@ -77,3 +77,20 @@ def test_motor_flc_bad_input():
     )
     assert response.status_code == 400
     assert "error" in response.json()
+
+
+def test_transformer_sizing_ok():
+    response = client.post(
+        "/transformer-sizing",
+        json={"kva": 75, "primary_voltage": 480, "secondary_voltage": 208, "phase": "three"},
+    )
+    assert response.status_code == 200
+    assert response.json()["secondary_fla"] == 208.19
+
+
+def test_transformer_sizing_bad_input():
+    response = client.post(
+        "/transformer-sizing",
+        json={"kva": 0, "primary_voltage": 480, "secondary_voltage": 208, "phase": "three"},
+    )
+    assert response.status_code == 422

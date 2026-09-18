@@ -171,6 +171,12 @@ Look up single- or three-phase motor full-load current by horsepower and system 
 
 ---
 
+✅ Transformer Sizing Calculator
+
+Calculate primary and secondary full-load amperes for single- or three-phase transformers from rated kVA and voltage.
+
+---
+
 Additional calculators are planned for future releases as the platform continues to grow.
 
 ---
@@ -582,7 +588,6 @@ Future development will focus on expanding ElectricalAI Pro into a complete AI-p
 - Unit conversion tools
 - NEC reference tools *(without reproducing copyrighted NEC content)*
 - Voltage drop comparison tools
-- Transformer calculations
 
 ### Productivity
 
