@@ -27,6 +27,10 @@ This project follows the principles of **Keep a Changelog**, with entries organi
 - NEC Quick Reference: browsable tables for standard breaker/fuse sizes,
   box volumes by box type, and minimum conduit bend radius, in both Dart
   (on-device) and the FastAPI backend (`GET /nec-reference`)
+- AI Assistant tool-calling: the chat backend can now call the app's own
+  calculator services (Ohm's law, voltage drop, wire ampacity, box fill,
+  conduit fill, circuit load, motor FLC, transformer sizing, unit
+  conversion) instead of estimating numeric answers from training data
 
 ---
 

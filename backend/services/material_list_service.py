@@ -28,7 +28,7 @@ class MaterialListService:
             },
         ]
 
-        raw = self.chat.ask(messages, temperature=0.2, max_tokens=1200)
+        raw = self.chat.ask(messages, temperature=0.2, max_tokens=1200, use_tools=False)
         payload = self._parse(raw)
         return payload
 

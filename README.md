@@ -117,6 +117,10 @@ The assistant is intended to support learning and productivity by helping users 
 
 The AI Assistant communicates with the FastAPI backend, which securely processes requests and connects to the NVIDIA Build API to generate intelligent responses.
 
+### Grounded in the App's Own Calculators
+
+When a question needs a specific number — ampacity, voltage drop, motor full-load current, box or conduit fill, transformer FLA, a unit conversion — the assistant calls the app's own calculator services directly instead of estimating from training data. The same math the calculator screens use backs the assistant's answers.
+
 > **Note:** AI-generated responses are intended to assist users and should always be verified against applicable electrical codes, manufacturer documentation, and local regulations before performing electrical work.
 
 ---
