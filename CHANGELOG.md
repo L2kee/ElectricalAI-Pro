@@ -24,6 +24,9 @@ This project follows the principles of **Keep a Changelog**, with entries organi
   wire size for one run, plus the smallest size meeting a 3% or 5% target,
   in both Dart (on-device) and the FastAPI backend
   (`POST /voltage-drop-comparison`)
+- NEC Quick Reference: browsable tables for standard breaker/fuse sizes,
+  box volumes by box type, and minimum conduit bend radius, in both Dart
+  (on-device) and the FastAPI backend (`GET /nec-reference`)
 
 ---
 

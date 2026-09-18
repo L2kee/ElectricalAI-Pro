@@ -25,6 +25,7 @@ from backend.services.circuit_load_service import CircuitLoadService
 from backend.services.conduit_fill_service import ConduitFillService
 from backend.services.errors import CalculatorError
 from backend.services.motor_flc_service import MotorFlcService
+from backend.services.nec_reference_service import NecReferenceService
 from backend.services.ohms_law_service import OhmsLawService
 from backend.services.transformer_sizing_service import TransformerSizingService
 from backend.services.unit_conversion_service import UnitConversionService
@@ -55,6 +56,7 @@ motor_flc_service = MotorFlcService()
 transformer_sizing_service = TransformerSizingService()
 unit_conversion_service = UnitConversionService()
 voltage_drop_comparison_service = VoltageDropComparisonService(voltage_drop_service)
+nec_reference_service = NecReferenceService()
 
 _chat_service = None
 _material_list_service = None
@@ -91,6 +93,11 @@ def root():
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+@app.get("/nec-reference")
+def nec_reference():
+    return nec_reference_service.get_reference()
 
 
 @app.post("/chat")

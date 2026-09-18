@@ -211,4 +211,15 @@ void main() {
       throwsA(isA<CalculatorException>()),
     );
   });
+
+  test('NEC reference box volumes match backend values', () {
+    expect(ElectricalTables.necBoxVolumesCuIn['4 in square, 1-1/2 in deep'], 21.0);
+    expect(ElectricalTables.necBoxVolumesCuIn['3 x 2 x 2 in device box'], 10.0);
+  });
+
+  test('NEC reference bend radius matches backend values', () {
+    expect(ElectricalTables.necConduitBendRadiusIn['1/2']!['oneShot'], 4.0);
+    expect(ElectricalTables.necConduitBendRadiusIn['4']!['otherBends'], 21.0);
+    expect(ElectricalTables.necConduitBendRadiusIn['2-1/2']!['oneShot'], 10.5);
+  });
 }

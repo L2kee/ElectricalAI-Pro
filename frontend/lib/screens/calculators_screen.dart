@@ -10,6 +10,7 @@ import 'box_fill_screen.dart';
 import 'conduit_fill_screen.dart';
 import 'circuit_load_screen.dart';
 import 'motor_flc_screen.dart';
+import 'nec_reference_screen.dart';
 import 'transformer_sizing_screen.dart';
 import 'unit_conversion_screen.dart';
 import 'voltage_drop_comparison_screen.dart';
@@ -190,6 +191,23 @@ class CalculatorsScreen extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (_) => const VoltageDropComparisonScreen(),
+                  ),
+                );
+              },
+            ),
+
+            const SizedBox(height: 18),
+
+            FeatureCard(
+              icon: Icons.menu_book,
+              iconColor: Colors.blueAccent,
+              title: "NEC Quick Reference",
+              subtitle: "Breaker sizes, box volumes, and conduit bend radius.",
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const NecReferenceScreen(),
                   ),
                 );
               },
