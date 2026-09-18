@@ -189,6 +189,12 @@ Compare voltage drop across every standard wire size for one run, and see the sm
 
 ---
 
+✅ NEC Quick Reference
+
+Browsable reference tables — standard breaker/fuse sizes, box volumes by box type, and minimum conduit bend radius. Numeric planning values only, not a reproduction of copyrighted NEC text.
+
+---
+
 Additional calculators are planned for future releases as the platform continues to grow.
 
 ---
@@ -597,7 +603,6 @@ Future development will focus on expanding ElectricalAI Pro into a complete AI-p
 ### Electrical Tools
 
 - Additional electrical calculators
-- NEC reference tools *(without reproducing copyrighted NEC content)*
 
 ### Productivity
 

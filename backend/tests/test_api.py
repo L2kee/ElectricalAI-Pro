@@ -11,6 +11,15 @@ def test_health():
     assert response.json()["status"] == "ok"
 
 
+def test_nec_reference_ok():
+    response = client.get("/nec-reference")
+    assert response.status_code == 200
+    body = response.json()
+    assert 20 in body["standard_breaker_fuse_amps"]
+    assert len(body["box_volumes"]) > 0
+    assert len(body["conduit_bend_radius"]) > 0
+
+
 def test_ohms_law_ok():
     response = client.post("/ohms-law", json={"voltage": 120, "resistance": 12})
     assert response.status_code == 200

@@ -4,7 +4,8 @@ ElectricalAI Pro — reference data used by the calculators.
 These values follow common industry practice used in field calculators
 (copper/aluminum DC resistance at 75°C, typical raceway internal areas,
 THHN approximate cross-sections, 310.16-style ampacity, 314.16(B)-style
-box-fill allowances). They are planning aids, not a reproduction of the
+box-fill allowances, 314.16(A)-style box volumes, Chapter 9 Table
+2-style bend radii). They are planning aids, not a reproduction of the
 NEC and not a substitute for the codebook, manufacturer data, or the AHJ.
 """
 
@@ -229,4 +230,42 @@ POWER_TO_WATTS: dict[str, float] = {
     "W": 1.0,
     "kW": 1000.0,
     "HP": 746.0,
+}
+
+# Standard box volumes in cubic inches, Table 314.16(A)-style entries.
+NEC_BOX_VOLUMES_CUIN: dict[str, float] = {
+    "4 in round/octagonal, 1-1/4 in deep": 12.5,
+    "4 in round/octagonal, 1-1/2 in deep": 15.5,
+    "4 in round/octagonal, 2-1/8 in deep": 21.5,
+    "4 in square, 1-1/4 in deep": 18.0,
+    "4 in square, 1-1/2 in deep": 21.0,
+    "4 in square, 2-1/8 in deep": 30.3,
+    "4-11/16 in square, 1-1/4 in deep": 25.5,
+    "4-11/16 in square, 1-1/2 in deep": 29.5,
+    "4-11/16 in square, 2-1/8 in deep": 42.0,
+    "3 x 2 x 1-1/2 in device box": 7.5,
+    "3 x 2 x 2 in device box": 10.0,
+    "3 x 2 x 2-1/4 in device box": 10.5,
+    "3 x 2 x 2-1/2 in device box": 12.5,
+    "3 x 2 x 2-3/4 in device box": 14.0,
+    "3 x 2 x 3-1/2 in device box": 18.0,
+    "4 x 2-1/8 x 1-1/2 in device box": 10.3,
+    "4 x 2-1/8 x 1-7/8 in device box": 13.0,
+    "4 x 2-1/8 x 2-1/8 in device box": 14.5,
+}
+
+# Minimum conduit/tubing bend radius in inches, Chapter 9 Table 2-style
+# entries, by trade size. one_shot covers one-shot and full-shoe benders;
+# other_bends covers all other bends (hand/hickey benders).
+NEC_CONDUIT_BEND_RADIUS_IN: dict[str, dict[str, float]] = {
+    "1/2": {"one_shot": 4.0, "other_bends": 4.0},
+    "3/4": {"one_shot": 4.5, "other_bends": 5.0},
+    "1": {"one_shot": 5.75, "other_bends": 6.0},
+    "1-1/4": {"one_shot": 7.25, "other_bends": 8.0},
+    "1-1/2": {"one_shot": 8.25, "other_bends": 9.0},
+    "2": {"one_shot": 9.5, "other_bends": 10.0},
+    "2-1/2": {"one_shot": 10.5, "other_bends": 12.0},
+    "3": {"one_shot": 13.0, "other_bends": 15.0},
+    "3-1/2": {"one_shot": 15.0, "other_bends": 18.0},
+    "4": {"one_shot": 16.0, "other_bends": 21.0},
 }
