@@ -17,6 +17,9 @@ This project follows the principles of **Keep a Changelog**, with entries organi
 - Transformer Sizing calculator: primary/secondary full-load amperes from
   rated kVA and voltage for single- and three-phase transformers, in both
   Dart (on-device) and the FastAPI backend (`POST /transformer-sizing`)
+- Unit Conversion calculator: length (ft/in/m/cm/mm), power (W/kW/HP), and
+  temperature (°C/°F), in both Dart (on-device) and the FastAPI backend
+  (`POST /unit-conversion`)
 
 ---
 

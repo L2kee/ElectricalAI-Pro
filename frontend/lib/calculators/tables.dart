@@ -212,6 +212,20 @@ class ElectricalTables {
     '1/2', '3/4', '1', '1.5', '2', '3', '5', '7.5', '10', '15', '20', '25',
     '30', '40', '50', '60', '75', '100', '125', '150', '200',
   ];
+
+  static const lengthToMeters = <String, double>{
+    'ft': 0.3048,
+    'in': 0.0254,
+    'm': 1.0,
+    'cm': 0.01,
+    'mm': 0.001,
+  };
+
+  static const powerToWatts = <String, double>{
+    'W': 1.0,
+    'kW': 1000.0,
+    'HP': 746.0,
+  };
 }
 
 class CalculatorException implements Exception {
@@ -230,4 +244,8 @@ String normalizePhase(String phase) {
   if (singleAliases.contains(kind)) return 'single';
   if (threeAliases.contains(kind)) return 'three';
   throw CalculatorException('Phase must be single or three.');
+}
+
+double roundTo(double value, int decimals) {
+  return double.parse(value.toStringAsFixed(decimals));
 }

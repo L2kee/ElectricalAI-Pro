@@ -11,6 +11,7 @@ import 'conduit_fill_screen.dart';
 import 'circuit_load_screen.dart';
 import 'motor_flc_screen.dart';
 import 'transformer_sizing_screen.dart';
+import 'unit_conversion_screen.dart';
 
 class CalculatorsScreen extends StatelessWidget {
   const CalculatorsScreen({super.key});
@@ -154,6 +155,23 @@ class CalculatorsScreen extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (_) => const TransformerSizingScreen(),
+                  ),
+                );
+              },
+            ),
+
+            const SizedBox(height: 18),
+
+            FeatureCard(
+              icon: Icons.swap_horiz,
+              iconColor: Colors.brown,
+              title: "Unit Conversion",
+              subtitle: "Convert length, power, and temperature units.",
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const UnitConversionScreen(),
                   ),
                 );
               },

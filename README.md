@@ -177,6 +177,12 @@ Calculate primary and secondary full-load amperes for single- or three-phase tra
 
 ---
 
+✅ Unit Conversion
+
+Convert common length, power, and temperature units (feet/meters/inches, watts/kilowatts/horsepower, °C/°F).
+
+---
+
 Additional calculators are planned for future releases as the platform continues to grow.
 
 ---
@@ -585,7 +591,6 @@ Future development will focus on expanding ElectricalAI Pro into a complete AI-p
 ### Electrical Tools
 
 - Additional electrical calculators
-- Unit conversion tools
 - NEC reference tools *(without reproducing copyrighted NEC content)*
 - Voltage drop comparison tools
 

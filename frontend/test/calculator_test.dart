@@ -6,6 +6,7 @@ import 'package:frontend/calculators/motor_flc.dart';
 import 'package:frontend/calculators/ohms_law.dart';
 import 'package:frontend/calculators/tables.dart';
 import 'package:frontend/calculators/transformer_sizing.dart';
+import 'package:frontend/calculators/unit_conversion.dart';
 import 'package:frontend/calculators/voltage_drop.dart';
 import 'package:frontend/calculators/wire_ampacity.dart';
 
@@ -140,5 +141,39 @@ void main() {
       () => normalizePhase('two'),
       throwsA(isA<CalculatorException>()),
     );
+  });
+
+  test('unit conversion length feet to meters', () {
+    final result = convertUnit(category: 'length', fromUnit: 'ft', toUnit: 'm', value: 100);
+    expect(result.result, 30.48);
+  });
+
+  test('unit conversion power HP to watts', () {
+    final result = convertUnit(category: 'power', fromUnit: 'HP', toUnit: 'W', value: 1);
+    expect(result.result, 746.0);
+  });
+
+  test('unit conversion temperature C to F', () {
+    final result = convertUnit(category: 'temperature', fromUnit: 'C', toUnit: 'F', value: 30);
+    expect(result.result, 86.0);
+  });
+
+  test('unit conversion rejects unknown category', () {
+    expect(
+      () => convertUnit(category: 'mass', fromUnit: 'kg', toUnit: 'lb', value: 1),
+      throwsA(isA<CalculatorException>()),
+    );
+  });
+
+  test('unit conversion length/power units are case and whitespace insensitive', () {
+    final length = convertUnit(category: 'length', fromUnit: ' FT ', toUnit: 'M', value: 100);
+    expect(length.result, 30.48);
+    expect(length.fromUnit, 'ft');
+    expect(length.toUnit, 'm');
+
+    final power = convertUnit(category: 'power', fromUnit: 'hp', toUnit: 'w', value: 1);
+    expect(power.result, 746.0);
+    expect(power.fromUnit, 'HP');
+    expect(power.toUnit, 'W');
   });
 }
