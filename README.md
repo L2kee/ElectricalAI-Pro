@@ -183,6 +183,12 @@ Convert common length, power, and temperature units (feet/meters/inches, watts/k
 
 ---
 
+✅ Voltage Drop Comparison
+
+Compare voltage drop across every standard wire size for one run, and see the smallest size that meets a 3% or 5% target.
+
+---
+
 Additional calculators are planned for future releases as the platform continues to grow.
 
 ---
@@ -592,7 +598,6 @@ Future development will focus on expanding ElectricalAI Pro into a complete AI-p
 
 - Additional electrical calculators
 - NEC reference tools *(without reproducing copyrighted NEC content)*
-- Voltage drop comparison tools
 
 ### Productivity
 

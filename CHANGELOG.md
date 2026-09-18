@@ -20,6 +20,10 @@ This project follows the principles of **Keep a Changelog**, with entries organi
 - Unit Conversion calculator: length (ft/in/m/cm/mm), power (W/kW/HP), and
   temperature (°C/°F), in both Dart (on-device) and the FastAPI backend
   (`POST /unit-conversion`)
+- Voltage Drop Comparison calculator: voltage drop across every standard
+  wire size for one run, plus the smallest size meeting a 3% or 5% target,
+  in both Dart (on-device) and the FastAPI backend
+  (`POST /voltage-drop-comparison`)
 
 ---
 

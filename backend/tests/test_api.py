@@ -112,3 +112,22 @@ def test_unit_conversion_bad_input():
     )
     assert response.status_code == 400
     assert "error" in response.json()
+
+
+def test_voltage_drop_comparison_ok():
+    response = client.post(
+        "/voltage-drop-comparison",
+        json={"current": 16, "length_ft": 75, "material": "copper", "voltage": 120, "phase": "single"},
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["smallest_size_within_3_percent"] == "10 AWG"
+    assert len(body["results"]) == 18
+
+
+def test_voltage_drop_comparison_bad_input():
+    response = client.post(
+        "/voltage-drop-comparison",
+        json={"current": 0, "length_ft": 75},
+    )
+    assert response.status_code == 422
