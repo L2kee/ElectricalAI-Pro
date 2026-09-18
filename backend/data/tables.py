@@ -214,3 +214,19 @@ MOTOR_FLC_THREE_PHASE: dict[str, dict[str, float]] = {
     "150": {"200": 414.0, "208": 396.0, "230": 360.0, "460": 180.0, "575": 144.0},
     "200": {"200": 552.0, "208": 528.0, "230": 480.0, "460": 240.0, "575": 192.0},
 }
+
+# Length units, expressed as meters per unit.
+LENGTH_TO_METERS: dict[str, float] = {
+    "ft": 0.3048,
+    "in": 0.0254,
+    "m": 1.0,
+    "cm": 0.01,
+    "mm": 0.001,
+}
+
+# Power units, expressed as watts per unit. 1 HP = 746 W (electrical HP).
+POWER_TO_WATTS: dict[str, float] = {
+    "W": 1.0,
+    "kW": 1000.0,
+    "HP": 746.0,
+}

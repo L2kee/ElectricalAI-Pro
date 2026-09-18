@@ -94,3 +94,21 @@ def test_transformer_sizing_bad_input():
         json={"kva": 0, "primary_voltage": 480, "secondary_voltage": 208, "phase": "three"},
     )
     assert response.status_code == 422
+
+
+def test_unit_conversion_ok():
+    response = client.post(
+        "/unit-conversion",
+        json={"category": "length", "from_unit": "ft", "to_unit": "m", "value": 100},
+    )
+    assert response.status_code == 200
+    assert response.json()["result"] == 30.48
+
+
+def test_unit_conversion_bad_input():
+    response = client.post(
+        "/unit-conversion",
+        json={"category": "mass", "from_unit": "kg", "to_unit": "lb", "value": 1},
+    )
+    assert response.status_code == 400
+    assert "error" in response.json()
