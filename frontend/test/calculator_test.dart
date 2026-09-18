@@ -2,8 +2,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:frontend/calculators/box_fill.dart';
 import 'package:frontend/calculators/circuit_load.dart';
 import 'package:frontend/calculators/conduit_fill.dart';
+import 'package:frontend/calculators/motor_flc.dart';
 import 'package:frontend/calculators/ohms_law.dart';
 import 'package:frontend/calculators/tables.dart';
+import 'package:frontend/calculators/transformer_sizing.dart';
 import 'package:frontend/calculators/voltage_drop.dart';
 import 'package:frontend/calculators/wire_ampacity.dart';
 
@@ -72,6 +74,70 @@ void main() {
   test('rejects zero current', () {
     expect(
       () => calculateOhmsLaw(voltage: 120, current: 0),
+      throwsA(isA<CalculatorException>()),
+    );
+  });
+
+  test('motor FLC three-phase 10 HP 230V', () {
+    final result = calculateMotorFlc(horsepower: '10', voltage: '230', phase: 'three');
+    expect(result.fullLoadCurrent, 28.0);
+    expect(result.minConductorAmpacityAmps, 35.0);
+  });
+
+  test('motor FLC single-phase 5 HP 115V', () {
+    final result = calculateMotorFlc(horsepower: '5', voltage: '115', phase: 'single');
+    expect(result.fullLoadCurrent, 56.0);
+  });
+
+  test('motor FLC rejects unsupported voltage', () {
+    expect(
+      () => calculateMotorFlc(horsepower: '10', voltage: '120', phase: 'three'),
+      throwsA(isA<CalculatorException>()),
+    );
+  });
+
+  test('transformer sizing three-phase 75kVA 480 to 208', () {
+    final result = calculateTransformerSizing(
+      kva: 75,
+      primaryVoltage: 480,
+      secondaryVoltage: 208,
+      phase: 'three',
+    );
+    expect(result.primaryFla, 90.21);
+    expect(result.secondaryFla, 208.19);
+  });
+
+  test('transformer sizing single-phase 25kVA 240 to 120', () {
+    final result = calculateTransformerSizing(
+      kva: 25,
+      primaryVoltage: 240,
+      secondaryVoltage: 120,
+      phase: 'single',
+    );
+    expect(result.primaryFla, 104.17);
+    expect(result.secondaryFla, 208.33);
+  });
+
+  test('transformer sizing rejects zero kVA', () {
+    expect(
+      () => calculateTransformerSizing(kva: 0, primaryVoltage: 480, secondaryVoltage: 208),
+      throwsA(isA<CalculatorException>()),
+    );
+  });
+
+  test('motor FLC min conductor ampacity rounds exact tie up', () {
+    // 2.5 A * 1.25 = 3.125 exactly; must round to 3.13 to match the
+    // backend's round-half-up, not down to 3.12.
+    final result = calculateMotorFlc(horsepower: '1/6', voltage: '200', phase: 'single');
+    expect(result.minConductorAmpacityAmps, 3.13);
+  });
+
+  test('normalizePhase accepts aliases and rejects unknown', () {
+    expect(normalizePhase('Single'), 'single');
+    expect(normalizePhase('three-phase'), 'three');
+    expect(normalizePhase('3'), 'three');
+    expect(
+      () => normalizePhase('two'),
       throwsA(isA<CalculatorException>()),
     );
   });

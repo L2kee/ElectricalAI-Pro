@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from backend.data.tables import ALUMINUM_RESISTANCE_MULTIPLIER, COPPER_OHMS_PER_KFT_75C
 from backend.services.errors import CalculatorError
+from backend.services.phase import normalize_phase
 
 
 class VoltageDropService:
@@ -33,15 +34,9 @@ class VoltageDropService:
         elif metal != "copper":
             raise CalculatorError("Material must be copper or aluminum.")
 
-        kind = phase.strip().lower()
-        if kind in {"single", "1", "1ph", "single-phase"}:
-            multiplier = 2.0
-            phase_label = "single-phase"
-        elif kind in {"three", "3", "3ph", "three-phase"}:
-            multiplier = 1.732
-            phase_label = "three-phase"
-        else:
-            raise CalculatorError("Phase must be single or three.")
+        kind = normalize_phase(phase)
+        multiplier = 2.0 if kind == "single" else 1.732
+        phase_label = "single-phase" if kind == "single" else "three-phase"
 
         voltage_drop = current * ohms_per_kft * (length_ft / 1000.0) * multiplier
         percent = (voltage_drop / voltage) * 100.0

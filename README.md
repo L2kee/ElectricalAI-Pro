@@ -165,6 +165,18 @@ Solve P = V × I, optionally apply 125% for continuous loads, and suggest the ne
 
 ---
 
+✅ Motor Full-Load Current Calculator
+
+Look up single- or three-phase motor full-load current by horsepower and system voltage, with the 125% minimum branch-circuit conductor ampacity.
+
+---
+
+✅ Transformer Sizing Calculator
+
+Calculate primary and secondary full-load amperes for single- or three-phase transformers from rated kVA and voltage.
+
+---
+
 Additional calculators are planned for future releases as the platform continues to grow.
 
 ---
@@ -576,7 +588,6 @@ Future development will focus on expanding ElectricalAI Pro into a complete AI-p
 - Unit conversion tools
 - NEC reference tools *(without reproducing copyrighted NEC content)*
 - Voltage drop comparison tools
-- Motor and transformer calculations
 
 ### Productivity
 
