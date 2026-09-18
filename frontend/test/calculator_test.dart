@@ -8,6 +8,7 @@ import 'package:frontend/calculators/tables.dart';
 import 'package:frontend/calculators/transformer_sizing.dart';
 import 'package:frontend/calculators/unit_conversion.dart';
 import 'package:frontend/calculators/voltage_drop.dart';
+import 'package:frontend/calculators/voltage_drop_comparison.dart';
 import 'package:frontend/calculators/wire_ampacity.dart';
 
 void main() {
@@ -175,5 +176,39 @@ void main() {
     expect(power.result, 746.0);
     expect(power.fromUnit, 'HP');
     expect(power.toUnit, 'W');
+  });
+
+  test('voltage drop comparison finds smallest size within each target', () {
+    final result = compareVoltageDrop(
+      current: 16,
+      lengthFt: 75,
+      material: 'copper',
+      voltage: 120,
+      phase: 'single',
+    );
+    expect(result.smallestSizeWithin3Percent, '10 AWG');
+    expect(result.smallestSizeWithin5Percent, '12 AWG');
+    expect(result.results.length, ElectricalTables.voltageDropWireSizes.length);
+  });
+
+  test('voltage drop comparison matches single-size calculation', () {
+    final result = compareVoltageDrop(
+      current: 16,
+      lengthFt: 75,
+      material: 'copper',
+      voltage: 120,
+      phase: 'single',
+    );
+    final row12awg = result.results.firstWhere((r) => r.wireSize == '12 AWG');
+    expect(row12awg.percentDrop, closeTo(3.86, 0.01));
+    expect(row12awg.within3Percent, isFalse);
+    expect(row12awg.within5Percent, isTrue);
+  });
+
+  test('voltage drop comparison rejects zero current', () {
+    expect(
+      () => compareVoltageDrop(current: 0, lengthFt: 75, material: 'copper', voltage: 120, phase: 'single'),
+      throwsA(isA<CalculatorException>()),
+    );
   });
 }
