@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../services/ai_service.dart';
+import '../theme/app_colors.dart';
 import '../widgets/disclaimer_banner.dart';
 
 class AIScreen extends StatefulWidget {
@@ -88,7 +89,7 @@ class _AIScreenState extends State<AIScreen> {
                             padding: const EdgeInsets.all(14),
                             constraints: const BoxConstraints(maxWidth: 720),
                             decoration: BoxDecoration(
-                              color: isUser ? const Color(0xFFC62828) : Colors.white,
+                              color: isUser ? const Color(0xFFC62828) : AppColors.surface,
                               borderRadius: BorderRadius.circular(14),
                               boxShadow: const [
                                 BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 2)),
@@ -98,7 +99,7 @@ class _AIScreenState extends State<AIScreen> {
                               turn.text,
                               style: TextStyle(
                                 fontSize: 16,
-                                color: isUser ? Colors.white : Colors.black87,
+                                color: isUser ? Colors.white : AppColors.dark,
                                 height: 1.4,
                               ),
                             ),

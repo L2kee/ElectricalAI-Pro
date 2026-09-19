@@ -28,7 +28,7 @@ class DashboardHeader extends StatelessWidget {
 
                   const SizedBox(width: 10),
 
-                  const Flexible(
+                  Flexible(
                     child: Text(
                       "ElectricalAI",
                       overflow: TextOverflow.ellipsis,
@@ -67,7 +67,7 @@ class DashboardHeader extends StatelessWidget {
 
               const SizedBox(height: AppSpacing.md),
 
-              const Text(
+              Text(
                 "Professional Electrical Assistant",
                 style: TextStyle(
                   fontSize: 18,
@@ -78,7 +78,7 @@ class DashboardHeader extends StatelessWidget {
 
               const SizedBox(height: 8),
 
-              const Text(
+              Text(
                 "Powerful tools.\nSmarter work.\nBuilt for electricians.",
                 style: TextStyle(
                   fontSize: 15,
@@ -96,7 +96,7 @@ class DashboardHeader extends StatelessWidget {
             width: 56,
             height: 56,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.surface,
               borderRadius: BorderRadius.circular(18),
               boxShadow: const [
                 BoxShadow(

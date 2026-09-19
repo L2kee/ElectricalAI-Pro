@@ -60,6 +60,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           const SizedBox(height: 12),
+          Card(
+            child: ValueListenableBuilder<bool>(
+              valueListenable: AppSettings.isDarkMode,
+              builder: (context, isDark, _) {
+                return SwitchListTile(
+                  secondary: const Icon(Icons.dark_mode_outlined),
+                  title: const Text('Dark mode'),
+                  subtitle: const Text('Switch the app to a dark color scheme'),
+                  value: isDark,
+                  onChanged: AppSettings.setDarkMode,
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 12),
           const Card(
             child: ListTile(
               leading: Icon(Icons.support_agent_outlined),
