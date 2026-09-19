@@ -1,11 +1,11 @@
 {
-    "name": "frontend",
-    "short_name": "frontend",
+    "name": "ElectricalAI Pro",
+    "short_name": "ElectricalAI Pro",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "AI-powered electrical assistant and professional calculators for electricians.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
