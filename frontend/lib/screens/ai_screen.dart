@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../services/ai_service.dart';
 import '../theme/app_colors.dart';
@@ -110,14 +111,32 @@ class _AIScreenState extends State<AIScreen> {
             ),
             if (_loading) const LinearProgressIndicator(),
             const SizedBox(height: 12),
-            TextField(
-              controller: _controller,
-              minLines: 1,
-              maxLines: 4,
-              onSubmitted: (_) => _askAI(),
-              decoration: const InputDecoration(
-                labelText: 'Ask a question',
-                border: OutlineInputBorder(),
+            Focus(
+              // TextField's own onSubmitted doesn't fire on Enter once
+              // maxLines > 1 - Flutter treats Enter as "insert a newline"
+              // for multi-line fields by default. Intercept it here so
+              // Enter always sends, matching the actual request (a
+              // modifier-aware Shift+Enter-for-newline variant was tried
+              // first but couldn't be verified reliably and wasn't asked
+              // for, so dropped rather than shipped half-checked).
+              onKeyEvent: (node, event) {
+                final isEnter = event.logicalKey == LogicalKeyboardKey.enter ||
+                    event.logicalKey == LogicalKeyboardKey.numpadEnter;
+                if (event is KeyDownEvent && isEnter) {
+                  _askAI();
+                  return KeyEventResult.handled;
+                }
+                return KeyEventResult.ignored;
+              },
+              child: TextField(
+                controller: _controller,
+                minLines: 1,
+                maxLines: 4,
+                onSubmitted: (_) => _askAI(),
+                decoration: const InputDecoration(
+                  labelText: 'Ask a question',
+                  border: OutlineInputBorder(),
+                ),
               ),
             ),
             const SizedBox(height: 12),
