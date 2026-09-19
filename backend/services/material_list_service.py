@@ -46,10 +46,24 @@ class MaterialListService:
 
         try:
             data = json.loads(cleaned)
-        except json.JSONDecodeError as exc:
-            raise CalculatorError(
-                "The AI did not return a usable material list. Try a more specific project description."
-            ) from exc
+        except json.JSONDecodeError:
+            # Even in JSON mode, models often still wrap the object in a
+            # sentence ("Here's the material list:" / a trailing note), so
+            # the *whole* string isn't valid JSON even though a real JSON
+            # object is present somewhere inside it. Fall back to locating
+            # that object directly instead of giving up on the first
+            # whole-string parse failure.
+            extracted = self._extract_json_object(cleaned)
+            if extracted is None:
+                raise CalculatorError(
+                    "The AI did not return a usable material list. Try a more specific project description."
+                )
+            try:
+                data = json.loads(extracted)
+            except json.JSONDecodeError as exc:
+                raise CalculatorError(
+                    "The AI did not return a usable material list. Try a more specific project description."
+                ) from exc
 
         items = data.get("items")
         if not isinstance(items, list) or not items:
@@ -83,3 +97,38 @@ class MaterialListService:
             assumptions = [str(assumptions)]
 
         return {"items": normalized, "assumptions": [str(a) for a in assumptions]}
+
+    @staticmethod
+    def _extract_json_object(text: str) -> str | None:
+        """Return the substring spanning the first top-level {...} object in
+        text, or None if no balanced object is found. String-aware so a
+        brace inside a quoted value (or an escaped quote) doesn't throw off
+        the depth count."""
+        start = text.find("{")
+        if start == -1:
+            return None
+
+        depth = 0
+        in_string = False
+        escape = False
+        for index in range(start, len(text)):
+            char = text[index]
+            if in_string:
+                if escape:
+                    escape = False
+                elif char == "\\":
+                    escape = True
+                elif char == '"':
+                    in_string = False
+                continue
+
+            if char == '"':
+                in_string = True
+            elif char == "{":
+                depth += 1
+            elif char == "}":
+                depth -= 1
+                if depth == 0:
+                    return text[start : index + 1]
+
+        return None
