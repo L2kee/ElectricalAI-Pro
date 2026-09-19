@@ -20,18 +20,20 @@ from backend.models.unit_conversion_request import UnitConversionRequest
 from backend.models.voltage_drop_comparison_request import VoltageDropComparisonRequest
 from backend.models.voltage_drop_request import VoltageDropRequest
 from backend.models.wire_ampacity_request import WireAmpacityRequest
-from backend.services.box_fill_service import BoxFillService
-from backend.services.circuit_load_service import CircuitLoadService
-from backend.services.conduit_fill_service import ConduitFillService
 from backend.services.errors import CalculatorError
-from backend.services.motor_flc_service import MotorFlcService
 from backend.services.nec_reference_service import NecReferenceService
-from backend.services.ohms_law_service import OhmsLawService
-from backend.services.transformer_sizing_service import TransformerSizingService
-from backend.services.unit_conversion_service import UnitConversionService
+from backend.services.registry import (
+    box_fill_service,
+    circuit_load_service,
+    conduit_fill_service,
+    motor_flc_service,
+    ohms_service,
+    transformer_sizing_service,
+    unit_conversion_service,
+    voltage_drop_service,
+    wire_ampacity_service,
+)
 from backend.services.voltage_drop_comparison_service import VoltageDropComparisonService
-from backend.services.voltage_drop_service import VoltageDropService
-from backend.services.wire_ampacity_service import WireAmpacityService
 
 app = FastAPI(
     title="ElectricalAI Pro API",
@@ -46,15 +48,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-ohms_service = OhmsLawService()
-voltage_drop_service = VoltageDropService()
-conduit_fill_service = ConduitFillService()
-box_fill_service = BoxFillService()
-wire_ampacity_service = WireAmpacityService()
-circuit_load_service = CircuitLoadService()
-motor_flc_service = MotorFlcService()
-transformer_sizing_service = TransformerSizingService()
-unit_conversion_service = UnitConversionService()
 voltage_drop_comparison_service = VoltageDropComparisonService(voltage_drop_service)
 nec_reference_service = NecReferenceService()
 

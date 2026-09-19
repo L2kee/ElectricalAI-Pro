@@ -20,6 +20,18 @@ Hard rules:
   lockout/tagout, and that work should not be done energized unless required and qualified.
 """
 
+TOOL_USE_PROMPT = """
+Tools:
+- You have calculator tools: ohms_law, voltage_drop, wire_ampacity, box_fill,
+  conduit_fill, circuit_load, motor_flc, transformer_sizing, unit_conversion.
+- When a question needs a specific number — ampacity, voltage drop, full-load
+  current, box or conduit fill, breaker sizing, transformer FLA, or a unit
+  conversion — call the matching tool instead of estimating from memory.
+  Use the number the tool returns in your answer.
+- If a tool call returns an error, read it, fix the arguments (wire size,
+  units, etc.), and try again rather than falling back to a guessed value.
+"""
+
 MATERIAL_LIST_PROMPT = """
 You generate practical electrical material lists.
 

@@ -5,7 +5,7 @@ from __future__ import annotations
 from uuid import uuid4
 
 from backend.ai.chat import AIChat
-from backend.ai.prompts import SYSTEM_PROMPT
+from backend.ai.prompts import SYSTEM_PROMPT, TOOL_USE_PROMPT
 from backend.services.errors import CalculatorError
 
 
@@ -24,7 +24,11 @@ class ChatService:
         history.append({"role": "user", "content": text})
         history[:] = history[-12:]
 
-        messages = [{"role": "system", "content": SYSTEM_PROMPT}, *history]
+        messages = [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "system", "content": TOOL_USE_PROMPT},
+            *history,
+        ]
         answer = self.chat.ask(messages)
         history.append({"role": "assistant", "content": answer})
 
