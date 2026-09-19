@@ -28,7 +28,13 @@ class MaterialListService:
             },
         ]
 
-        raw = self.chat.ask(messages, temperature=0.2, max_tokens=1200, use_tools=False)
+        raw = self.chat.ask(
+            messages,
+            temperature=0.2,
+            max_tokens=1200,
+            use_tools=False,
+            response_format={"type": "json_object"},
+        )
         payload = self._parse(raw)
         return payload
 

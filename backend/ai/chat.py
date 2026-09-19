@@ -33,7 +33,14 @@ class AIChat:
         self.client = self._ai.get_client()
         self.model = self._ai.model
 
-    def ask(self, messages, temperature: float = 0.3, max_tokens: int = 1024, use_tools: bool = True) -> str:
+    def ask(
+        self,
+        messages,
+        temperature: float = 0.3,
+        max_tokens: int = 1024,
+        use_tools: bool = True,
+        response_format: dict | None = None,
+    ) -> str:
         conversation = list(messages)
         # Scoped to this one ask() call only: if a request with tools gets
         # rejected, later rounds within this same call skip tools too, but
@@ -58,7 +65,13 @@ class AIChat:
             # so retrying without tools there could just 400 again for an
             # unrelated reason and mask what actually failed.
             message, tools_supported = self._complete(
-                conversation, temperature, max_tokens, use_tools, tools_supported, allow_fallback=round_index == 0
+                conversation,
+                temperature,
+                max_tokens,
+                use_tools,
+                tools_supported,
+                allow_fallback=round_index == 0,
+                response_format=response_format,
             )
             tool_calls = getattr(message, "tool_calls", None) if tools_supported else None
             valid_calls = self._valid_tool_calls(tool_calls)
@@ -74,10 +87,12 @@ class AIChat:
 
         raise CalculatorError("The AI could not finish after multiple tool calls.")
 
-    def _complete(self, conversation, temperature, max_tokens, use_tools, tools_supported, allow_fallback):
+    def _complete(
+        self, conversation, temperature, max_tokens, use_tools, tools_supported, allow_fallback, response_format=None
+    ):
         attempt_with_tools = use_tools and tools_supported
         try:
-            response = self._create(conversation, temperature, max_tokens, attempt_with_tools)
+            response = self._create(conversation, temperature, max_tokens, attempt_with_tools, response_format)
         except BadRequestError as exc:
             if attempt_with_tools and allow_fallback:
                 # A 400 with tools attached, on the first round of a fresh
@@ -86,7 +101,9 @@ class AIChat:
                 # back to a plain completion for the rest of this ask()
                 # call instead of failing the whole chat turn.
                 logger.warning("AI request with tools was rejected (%s); retrying this turn without tools.", exc)
-                return self._complete(conversation, temperature, max_tokens, use_tools, False, allow_fallback)
+                return self._complete(
+                    conversation, temperature, max_tokens, use_tools, False, allow_fallback, response_format
+                )
             raise CalculatorError(f"AI request failed: {exc}") from exc
         except (APITimeoutError, APIError, OpenAIError) as exc:
             # Transient failures (timeout, rate limit, connection, 5xx) say
@@ -99,8 +116,10 @@ class AIChat:
             raise CalculatorError("The AI returned an empty response.")
         return choices[0].message, attempt_with_tools
 
-    def _create(self, conversation, temperature, max_tokens, with_tools):
+    def _create(self, conversation, temperature, max_tokens, with_tools, response_format=None):
         kwargs = {"tools": TOOLS, "tool_choice": "auto"} if with_tools else {}
+        if response_format:
+            kwargs["response_format"] = response_format
         return self.client.chat.completions.create(
             model=self.model,
             messages=conversation,
