@@ -24,40 +24,45 @@ class ElectricalAIProApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'ElectricalAI Pro',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      home: const HomeScreen(),
-      builder: (context, child) {
-        if (child == null) return const SizedBox.shrink();
+    return ValueListenableBuilder<bool>(
+      valueListenable: AppSettings.isDarkMode,
+      builder: (context, isDarkMode, _) {
+        return MaterialApp(
+          title: 'ElectricalAI Pro',
+          debugShowCheckedModeBanner: false,
+          theme: isDarkMode ? AppTheme.darkTheme : AppTheme.lightTheme,
+          home: const HomeScreen(),
+          builder: (context, child) {
+            if (child == null) return const SizedBox.shrink();
 
-        final isWideScreen = MediaQuery.of(context).size.width > _wideScreenBreakpoint;
-        if (!isWideScreen) return child;
+            final isWideScreen = MediaQuery.of(context).size.width > _wideScreenBreakpoint;
+            if (!isWideScreen) return child;
 
-        return ColoredBox(
-          color: AppColors.border,
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: _wideScreenCardWidth),
-              child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 40),
-                decoration: BoxDecoration(
-                  color: AppColors.background,
-                  borderRadius: BorderRadius.circular(24),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.12),
-                      blurRadius: 32,
-                      offset: const Offset(0, 12),
+            return ColoredBox(
+              color: AppColors.border,
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: _wideScreenCardWidth),
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: 40),
+                    decoration: BoxDecoration(
+                      color: AppColors.background,
+                      borderRadius: BorderRadius.circular(24),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.12),
+                          blurRadius: 32,
+                          offset: const Offset(0, 12),
+                        ),
+                      ],
                     ),
-                  ],
+                    clipBehavior: Clip.antiAlias,
+                    child: child,
+                  ),
                 ),
-                clipBehavior: Clip.antiAlias,
-                child: child,
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     );
