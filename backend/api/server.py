@@ -3,10 +3,14 @@
 from __future__ import annotations
 
 import asyncio
+import os
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
 
 from backend.models.box_fill_request import BoxFillRequest
 from backend.models.chat_request import ChatRequest
@@ -41,12 +45,36 @@ app = FastAPI(
     description="AI assistant and electrical calculators for ElectricalAI Pro.",
 )
 
+_allowed_origins = [
+    origin.strip()
+    for origin in os.getenv(
+        "ALLOWED_ORIGINS", "https://evogencyglobal.com,https://www.evogencyglobal.com"
+    ).split(",")
+    if origin.strip()
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=_allowed_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+def _client_ip(request: Request) -> str:
+    """Render (and most PaaS hosts) sit behind a proxy, so the real client IP
+    arrives in X-Forwarded-For, not the raw socket address."""
+    forwarded = request.headers.get("x-forwarded-for")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return get_remote_address(request)
+
+
+_rate_limit_chat = os.getenv("RATE_LIMIT_CHAT", "10/hour")
+
+limiter = Limiter(key_func=_client_ip)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 voltage_drop_comparison_service = VoltageDropComparisonService(voltage_drop_service)
 nec_reference_service = NecReferenceService()
@@ -94,9 +122,12 @@ def nec_reference():
 
 
 @app.post("/chat")
-async def chat_endpoint(request: ChatRequest):
+@limiter.limit(_rate_limit_chat)
+async def chat_endpoint(request: Request, chat_request: ChatRequest):
     service = _chat_service_instance()
-    return await asyncio.to_thread(service.ask, request.message, request.conversation_id)
+    return await asyncio.to_thread(
+        service.ask, chat_request.message, chat_request.conversation_id
+    )
 
 
 @app.post("/ohms-law")
@@ -152,9 +183,10 @@ def wire_ampacity(request: WireAmpacityRequest):
 
 
 @app.post("/material-list")
-async def material_list(request: MaterialListRequest):
+@limiter.limit(_rate_limit_chat)
+async def material_list(request: Request, list_request: MaterialListRequest):
     service = _material_list_service_instance()
-    return await asyncio.to_thread(service.generate, request.project_description)
+    return await asyncio.to_thread(service.generate, list_request.project_description)
 
 
 @app.post("/circuit-load")

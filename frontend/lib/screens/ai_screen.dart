@@ -38,9 +38,8 @@ class _AIScreenState extends State<AIScreen> {
           _ChatTurn(
             role: 'assistant',
             text:
-                'Could not reach the AI backend at 127.0.0.1:8000.\n'
-                'Start the app with python launcher.py so the API is running, '
-                'and set NVIDIA_API_KEY in a .env file.\n\n$e',
+                'Could not reach the AI assistant. Check your connection '
+                'and try again in a moment.',
           ),
         );
       });
