@@ -32,6 +32,13 @@ This project follows the principles of **Keep a Changelog**, with entries organi
   conduit fill, circuit load, motor FLC, transformer sizing, unit
   conversion) instead of estimating numeric answers from training data
 
+## Fixed
+
+- Default `NVIDIA_MODEL` (`meta/llama-3.3-70b-instruct`) had reached
+  end-of-life on NVIDIA's Build API (410 Gone) and no longer worked out of
+  the box; replaced with `nvidia/nemotron-3-super-120b-a12b`, confirmed
+  working for both tool-calling and plain chat against the live API
+
 ---
 
 # [1.0.1] - 2026-08-28
