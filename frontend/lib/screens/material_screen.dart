@@ -38,9 +38,7 @@ class _MaterialScreenState extends State<MaterialScreen> {
     } catch (e) {
       setState(() {
         _result = null;
-        _error =
-            'Unable to generate materials. Start the backend with python launcher.py '
-            'and set NVIDIA_API_KEY.\n$e';
+        _error = 'Unable to generate materials. Check your connection and try again in a moment.';
       });
     } finally {
       setState(() => _loading = false);
