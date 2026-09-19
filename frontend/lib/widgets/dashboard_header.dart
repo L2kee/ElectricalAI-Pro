@@ -28,13 +28,17 @@ class DashboardHeader extends StatelessWidget {
 
                   const SizedBox(width: 10),
 
-                  const Text(
-                    "ElectricalAI",
-                    style: TextStyle(
-                      fontSize: 34,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.dark,
-                      letterSpacing: -.5,
+                  const Flexible(
+                    child: Text(
+                      "ElectricalAI",
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: TextStyle(
+                        fontSize: 34,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.dark,
+                        letterSpacing: -.5,
+                      ),
                     ),
                   ),
 
