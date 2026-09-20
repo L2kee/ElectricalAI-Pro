@@ -4,6 +4,7 @@ import '../theme/app_colors.dart';
 import '../widgets/app_scaffold.dart';
 import '../widgets/dashboard_header.dart';
 import '../widgets/feature_card.dart';
+import '../widgets/install_prompt_card.dart';
 import '../widgets/quick_action_card.dart';
 import '../widgets/section_title.dart';
 
@@ -25,7 +26,11 @@ class HomeScreen extends StatelessWidget {
         children: [
           const DashboardHeader(),
 
-          const SizedBox(height: 42),
+          const SizedBox(height: 28),
+
+          const InstallPromptCard(),
+
+          const SizedBox(height: 14),
 
           const SectionTitle("Quick Actions"),
 
