@@ -36,14 +36,19 @@ class HomeScreen extends StatelessWidget {
 
           const SizedBox(height: 20),
 
-          SizedBox(
-            height: 140,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
+          LayoutBuilder(
+            builder: (context, constraints) {
+              const cardWidth = 92.0;
+              const wideGap = 18.0;
+              const narrowGap = 10.0;
+              const requiredWidth = cardWidth * 4 + wideGap * 3;
+              final fitsUnscaled = constraints.maxWidth >= requiredWidth;
+
+              final cards = [
                 QuickActionCard(
                   icon: Icons.bolt,
                   title: "Ohm's\nLaw",
+                  width: fitsUnscaled ? cardWidth : null,
                   onTap: () {
                     Navigator.push(
                       context,
@@ -53,12 +58,10 @@ class HomeScreen extends StatelessWidget {
                     );
                   },
                 ),
-
-                const SizedBox(width: 18),
-
                 QuickActionCard(
                   icon: Icons.electric_bolt,
                   title: "Voltage\nDrop",
+                  width: fitsUnscaled ? cardWidth : null,
                   onTap: () {
                     Navigator.push(
                       context,
@@ -68,12 +71,10 @@ class HomeScreen extends StatelessWidget {
                     );
                   },
                 ),
-
-                const SizedBox(width: 18),
-
                 QuickActionCard(
                   icon: Icons.smart_toy,
                   title: "Ask\nAI",
+                  width: fitsUnscaled ? cardWidth : null,
                   onTap: () {
                     Navigator.push(
                       context,
@@ -83,12 +84,10 @@ class HomeScreen extends StatelessWidget {
                     );
                   },
                 ),
-
-                const SizedBox(width: 18),
-
                 QuickActionCard(
                   icon: Icons.inventory_2,
                   title: "Materials",
+                  width: fitsUnscaled ? cardWidth : null,
                   onTap: () {
                     Navigator.push(
                       context,
@@ -98,8 +97,46 @@ class HomeScreen extends StatelessWidget {
                     );
                   },
                 ),
-              ],
-            ),
+              ];
+
+              if (fitsUnscaled) {
+                return SizedBox(
+                  height: 140,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      cards[0],
+                      const SizedBox(width: wideGap),
+                      cards[1],
+                      const SizedBox(width: wideGap),
+                      cards[2],
+                      const SizedBox(width: wideGap),
+                      cards[3],
+                    ],
+                  ),
+                );
+              }
+
+              // Narrow (phone-width) screens: no room to scroll off the
+              // fourth card, so all four share the row evenly instead,
+              // each shrinking its icon/label together via the card's
+              // own FittedBox rather than clipping or wrapping oddly.
+              return SizedBox(
+                height: 140,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(child: cards[0]),
+                    const SizedBox(width: narrowGap),
+                    Expanded(child: cards[1]),
+                    const SizedBox(width: narrowGap),
+                    Expanded(child: cards[2]),
+                    const SizedBox(width: narrowGap),
+                    Expanded(child: cards[3]),
+                  ],
+                ),
+              );
+            },
           ),
 
           const SizedBox(height: 50),
