@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../calculators/tables.dart';
+import '../theme/app_colors.dart';
 import '../widgets/disclaimer_banner.dart';
+import '../widgets/glass.dart';
 
 class NecReferenceScreen extends StatelessWidget {
   const NecReferenceScreen({super.key});
@@ -83,27 +85,17 @@ class _BoxVolumesTab extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         const SizedBox(height: 8),
-        const Text(
+        Text(
           'Use with the Box Fill calculator\'s "Box volume" field.',
-          style: TextStyle(color: Colors.grey),
+          style: TextStyle(color: AppColors.muted),
         ),
         const SizedBox(height: 12),
-        Table(
-          columnWidths: const {0: FlexColumnWidth(3), 1: FlexColumnWidth(1)},
-          children: [
-            const TableRow(
-              children: [
-                Padding(padding: EdgeInsets.all(6), child: Text('Box type', style: TextStyle(fontWeight: FontWeight.bold))),
-                Padding(padding: EdgeInsets.all(6), child: Text('cu. in.', style: TextStyle(fontWeight: FontWeight.bold))),
-              ],
-            ),
+        MonoTable(
+          headers: const ['Box type', 'cu. in.'],
+          flex: const [3, 1],
+          rows: [
             for (final entry in ElectricalTables.necBoxVolumesCuIn.entries)
-              TableRow(
-                children: [
-                  Padding(padding: const EdgeInsets.all(6), child: Text(entry.key)),
-                  Padding(padding: const EdgeInsets.all(6), child: Text(entry.value.toStringAsFixed(1))),
-                ],
-              ),
+              [Text(entry.key), Text(entry.value.toStringAsFixed(1))],
           ],
         ),
       ],
@@ -124,29 +116,20 @@ class _BendRadiusTab extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         const SizedBox(height: 8),
-        const Text(
+        Text(
           'One-shot/full-shoe covers machine benders; other bends covers hand and hickey benders.',
-          style: TextStyle(color: Colors.grey),
+          style: TextStyle(color: AppColors.muted),
         ),
         const SizedBox(height: 12),
-        Table(
-          columnWidths: const {0: FlexColumnWidth(2), 1: FlexColumnWidth(2), 2: FlexColumnWidth(2)},
-          children: [
-            const TableRow(
-              children: [
-                Padding(padding: EdgeInsets.all(6), child: Text('Trade size', style: TextStyle(fontWeight: FontWeight.bold))),
-                Padding(padding: EdgeInsets.all(6), child: Text('One-shot (in)', style: TextStyle(fontWeight: FontWeight.bold))),
-                Padding(padding: EdgeInsets.all(6), child: Text('Other bends (in)', style: TextStyle(fontWeight: FontWeight.bold))),
-              ],
-            ),
+        MonoTable(
+          headers: const ['Trade size', 'One-shot (in)', 'Other bends (in)'],
+          rows: [
             for (final entry in ElectricalTables.necConduitBendRadiusIn.entries)
-              TableRow(
-                children: [
-                  Padding(padding: const EdgeInsets.all(6), child: Text(entry.key)),
-                  Padding(padding: const EdgeInsets.all(6), child: Text(entry.value['oneShot']!.toStringAsFixed(2))),
-                  Padding(padding: const EdgeInsets.all(6), child: Text(entry.value['otherBends']!.toStringAsFixed(2))),
-                ],
-              ),
+              [
+                Text(entry.key),
+                Text(entry.value['oneShot']!.toStringAsFixed(2)),
+                Text(entry.value['otherBends']!.toStringAsFixed(2)),
+              ],
           ],
         ),
       ],

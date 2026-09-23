@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../theme/app_colors.dart';
 import '../widgets/feature_card.dart';
+import '../widgets/section_title.dart';
 
 import 'ohms_law_screen.dart';
 import 'voltage_drop_screen.dart';
@@ -15,205 +15,71 @@ import 'transformer_sizing_screen.dart';
 import 'unit_conversion_screen.dart';
 import 'voltage_drop_comparison_screen.dart';
 
+class _Module {
+  const _Module(this.tag, this.title, this.subtitle, this.footer, this.builder);
+
+  final String tag;
+  final String title;
+  final String subtitle;
+  final String footer;
+  final Widget Function() builder;
+}
+
+final _modules = <_Module>[
+  _Module('V·I·R', "Ohm's Law", 'Solve voltage, current, or resistance.', 'V = I × R', () => const OhmsLawScreen()),
+  _Module('DROP', 'Voltage Drop', 'Conductor voltage drop against 3% and 5% targets.', 'Single · three phase', () => const VoltageDropScreen()),
+  _Module('AWG', 'Wire Ampacity', 'Allowable conductor ampacity by size and rating.', '60 · 75 · 90°C', () => const WireAmpacityScreen()),
+  _Module('BOX', 'Box Fill', 'Box fill volume from conductors, yokes, and clamps.', 'cu. in. required', () => const BoxFillScreen()),
+  _Module('FILL', 'Conduit Fill', 'Fill percentage by raceway, trade size, and wire.', '53 · 31 · 40%', () => const ConduitFillScreen()),
+  _Module('LOAD', 'Circuit Load', 'Branch circuit load with the 125% continuous rule.', 'Next standard breaker', () => const CircuitLoadScreen()),
+  _Module('M', 'Motor FLC', 'Motor full load current by HP and voltage.', 'FLC · 125% ampacity', () => const MotorFlcScreen()),
+  _Module('kVA', 'Transformer Sizing', 'Primary and secondary FLA from rated kVA.', 'Single · three phase', () => const TransformerSizingScreen()),
+  _Module('UNIT', 'Unit Conversion', 'Length, power, and temperature conversions.', 'ft · m · HP · °C', () => const UnitConversionScreen()),
+  _Module('CMP', 'Voltage Drop Comparison', 'Find the smallest wire size that meets your target.', 'Every size, one table', () => const VoltageDropComparisonScreen()),
+  _Module('REF', 'NEC Quick Reference', 'Breaker sizes, box volumes, and bend radius.', 'Lookup tables', () => const NecReferenceScreen()),
+];
+
 class CalculatorsScreen extends StatelessWidget {
   const CalculatorsScreen({super.key});
+
+  /// Shown on the dashboard, so the number there can never drift from
+  /// the modules actually listed here.
+  static int get moduleCount => _modules.length;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Electrical Calculators"),
+        title: const Text('Calculators'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: ListView(
-          children: [
-            FeatureCard(
-              icon: Icons.bolt,
-              iconColor: AppColors.primary,
-              title: "Ohm's Law",
-              subtitle: "Calculate voltage, current, or resistance.",
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const OhmsLawScreen(),
-                  ),
-                );
-              },
-            ),
-
-            const SizedBox(height: 18),
-
-            FeatureCard(
-              icon: Icons.electric_bolt,
-              iconColor: AppColors.accent,
-              title: "Voltage Drop",
-              subtitle: "Calculate conductor voltage drop.",
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const VoltageDropScreen(),
-                  ),
-                );
-              },
-            ),
-
-            const SizedBox(height: 18),
-
-            FeatureCard(
-              icon: Icons.cable,
-              iconColor: Colors.deepPurple,
-              title: "Wire Ampacity",
-              subtitle: "Determine allowable conductor ampacity.",
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const WireAmpacityScreen(),
-                  ),
-                );
-              },
-            ),
-
-            const SizedBox(height: 18),
-
-            FeatureCard(
-              icon: Icons.inventory_2,
-              iconColor: AppColors.success,
-              title: "Box Fill",
-              subtitle: "Calculate electrical box fill capacity.",
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const BoxFillScreen(),
-                  ),
-                );
-              },
-            ),
-
-            const SizedBox(height: 18),
-
-            FeatureCard(
-              icon: Icons.view_in_ar,
-              iconColor: Colors.teal,
-              title: "Conduit Fill",
-              subtitle: "Calculate conduit fill percentage.",
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const ConduitFillScreen(),
-                  ),
-                );
-              },
-            ),
-
-            const SizedBox(height: 18),
-
-            FeatureCard(
-              icon: Icons.calculate,
-              iconColor: Colors.orange,
-              title: "Circuit Load",
-              subtitle: "Calculate branch circuit load.",
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const CircuitLoadScreen(),
-                  ),
-                );
-              },
-            ),
-
-            const SizedBox(height: 18),
-
-            FeatureCard(
-              icon: Icons.settings_input_component,
-              iconColor: Colors.indigo,
-              title: "Motor FLC",
-              subtitle: "Look up motor full-load current by HP and voltage.",
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const MotorFlcScreen(),
-                  ),
-                );
-              },
-            ),
-
-            const SizedBox(height: 18),
-
-            FeatureCard(
-              icon: Icons.electrical_services,
-              iconColor: Colors.blueGrey,
-              title: "Transformer Sizing",
-              subtitle: "Get primary/secondary FLA from rated kVA.",
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const TransformerSizingScreen(),
-                  ),
-                );
-              },
-            ),
-
-            const SizedBox(height: 18),
-
-            FeatureCard(
-              icon: Icons.swap_horiz,
-              iconColor: Colors.brown,
-              title: "Unit Conversion",
-              subtitle: "Convert length, power, and temperature units.",
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const UnitConversionScreen(),
-                  ),
-                );
-              },
-            ),
-
-            const SizedBox(height: 18),
-
-            FeatureCard(
-              icon: Icons.compare_arrows,
-              iconColor: Colors.pink,
-              title: "Voltage Drop Comparison",
-              subtitle: "Find the smallest wire size that meets your target.",
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const VoltageDropComparisonScreen(),
-                  ),
-                );
-              },
-            ),
-
-            const SizedBox(height: 18),
-
-            FeatureCard(
-              icon: Icons.menu_book,
-              iconColor: Colors.blueAccent,
-              title: "NEC Quick Reference",
-              subtitle: "Breaker sizes, box volumes, and conduit bend radius.",
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const NecReferenceScreen(),
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
+      body: ListView(
+        padding: const EdgeInsets.fromLTRB(20, 28, 20, 32),
+        children: [
+          SectionTitle(
+            'The full bench.',
+            eyebrow: '(a) Calculators',
+            trailing: '$moduleCount modules',
+          ),
+          const SizedBox(height: 20),
+          FeatureGrid(
+            children: [
+              for (var i = 0; i < _modules.length; i++)
+                FeatureCard(
+                  index: (i + 1).toString().padLeft(2, '0'),
+                  tag: _modules[i].tag,
+                  title: _modules[i].title,
+                  subtitle: _modules[i].subtitle,
+                  footer: _modules[i].footer,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => _modules[i].builder()),
+                    );
+                  },
+                ),
+            ],
+          ),
+        ],
       ),
     );
   }

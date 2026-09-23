@@ -82,6 +82,7 @@ class _WireAmpacityScreenState extends State<WireAmpacityScreen> {
       result: _result == null
           ? null
           : Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 ResultMetric(label: 'Allowable ampacity', value: '${_result!.ampacity} A'),
                 if (_result!.typicalBranchOcpdAmps != null)
@@ -89,7 +90,7 @@ class _WireAmpacityScreenState extends State<WireAmpacityScreen> {
                     label: 'Typical branch-circuit OCPD',
                     value: '${_result!.typicalBranchOcpdAmps} A',
                   ),
-                Text(_result!.notes, textAlign: TextAlign.center, style: const TextStyle(color: Colors.grey)),
+                ResultNote(_result!.notes),
               ],
             ),
     );

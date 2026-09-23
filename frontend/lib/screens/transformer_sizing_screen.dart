@@ -77,10 +77,11 @@ class _TransformerSizingScreenState extends State<TransformerSizingScreen> {
       result: _result == null
           ? null
           : Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 ResultMetric(label: 'Primary FLA', value: '${_result!.primaryFla} A'),
                 ResultMetric(label: 'Secondary FLA', value: '${_result!.secondaryFla} A'),
-                Text(_result!.notes, textAlign: TextAlign.center, style: const TextStyle(color: Colors.grey)),
+                ResultNote(_result!.notes),
               ],
             ),
     );

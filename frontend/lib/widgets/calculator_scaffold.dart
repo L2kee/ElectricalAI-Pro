@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_colors.dart';
+import '../theme/app_theme.dart';
 import 'disclaimer_banner.dart';
+import 'glass.dart';
 
 class CalculatorScaffold extends StatelessWidget {
   const CalculatorScaffold({
@@ -31,81 +34,81 @@ class CalculatorScaffold extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.fromLTRB(20, 28, 20, 32),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Icon(icon, size: 70, color: Colors.red),
+            Row(
+              children: [
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: AppColors.signalSoft,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: AppColors.signalRing),
+                  ),
+                  child: Icon(icon, size: 20, color: AppColors.signal),
+                ),
+                const SizedBox(width: 12),
+                MonoLabel('Calculator', color: AppColors.signal),
+              ],
+            ),
             const SizedBox(height: 16),
             Text(
               title,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.w800,
+                letterSpacing: -0.8,
+                height: 1.1,
+                color: AppColors.text,
+              ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
             Text(
               subtitle,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16, color: Colors.grey),
+              style: TextStyle(fontSize: 15, color: AppColors.muted, height: 1.5),
             ),
             const SizedBox(height: 20),
             const DisclaimerBanner(compact: true),
-            const SizedBox(height: 24),
-            Card(
-              elevation: 4,
-              shadowColor: Colors.black12,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    ...fields,
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      height: 55,
-                      child: ElevatedButton(
-                        onPressed: loading ? null : onCalculate,
-                        child: loading
-                            ? const SizedBox(
-                                height: 24,
-                                width: 24,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 3,
-                                  color: Colors.white,
-                                ),
-                              )
-                            : const Text('CALCULATE'),
-                      ),
-                    ),
-                  ],
-                ),
+            const SizedBox(height: 20),
+            GlassWindow(
+              title: 'Inputs',
+              trailing: '${fields.length} fields',
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  ...fields,
+                  const SizedBox(height: 4),
+                  ElevatedButton(
+                    onPressed: loading ? null : onCalculate,
+                    child: loading
+                        ? SizedBox(
+                            height: 22,
+                            width: 22,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.5,
+                              color: AppColors.onSignal,
+                            ),
+                          )
+                        : const Text('Calculate'),
+                  ),
+                ],
               ),
             ),
             if (statusMessage.isNotEmpty || result != null) ...[
-              const SizedBox(height: 24),
-              Card(
-                elevation: 3,
-                child: Padding(
-                  padding: const EdgeInsets.all(18),
-                  child: Column(
-                    children: [
-                      if (statusMessage.isNotEmpty)
-                        Text(
-                          statusMessage,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                        ),
-                      if (result != null) ...[
-                        if (statusMessage.isNotEmpty) ...[
-                          const SizedBox(height: 18),
-                          const Divider(),
-                          const SizedBox(height: 12),
-                        ],
-                        result!,
-                      ],
-                    ],
-                  ),
+              const SizedBox(height: 16),
+              GlassWindow(
+                title: 'Output',
+                live: true,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // A result carries its own verdict line, so the status
+                    // message only shows on its own (validation errors).
+                    if (result != null) result! else StatusTag(statusMessage),
+                  ],
                 ),
               ),
             ],
@@ -116,6 +119,45 @@ class CalculatorScaffold extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Renders a calculator status line ("✓ Within fill limit", "✖ Over...",
+/// or a plain validation message) as a tinted tag: the theme's pass color
+/// for success, red for a failing check, amber for input problems.
+class StatusTag extends StatelessWidget {
+  const StatusTag(this.message, {super.key});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    final trimmed = message.trim();
+    final passed = trimmed.startsWith('✓') || trimmed.startsWith('✔');
+    final failed = trimmed.startsWith('✖');
+    final warned = trimmed.startsWith('⚠');
+    final text = (passed || failed || warned) ? trimmed.substring(1).trim() : trimmed;
+    final color = passed
+        ? AppColors.pass
+        : failed
+            ? AppColors.danger
+            : AppColors.warning;
+    return SignalTag(text, color: color);
+  }
+}
+
+/// Explanatory note under a result (table assumptions, derating hints).
+class ResultNote extends StatelessWidget {
+  const ResultNote(this.text, {super.key});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 12),
+      child: Text(text, style: TextStyle(fontSize: 13, color: AppColors.muted, height: 1.5)),
     );
   }
 }
@@ -135,19 +177,17 @@ class CalculatorField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 22),
+      padding: const EdgeInsets.only(bottom: 18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          MonoLabel(label, color: AppColors.muted),
           const SizedBox(height: 8),
           TextField(
             controller: controller,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            decoration: InputDecoration(
-              hintText: hint,
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            ),
+            style: TextStyle(fontFamily: AppTheme.mono, fontSize: 15, color: AppColors.text),
+            decoration: InputDecoration(hintText: hint),
           ),
         ],
       ),
@@ -174,17 +214,18 @@ class CalculatorDropdown<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 22),
+      padding: const EdgeInsets.only(bottom: 18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          MonoLabel(label, color: AppColors.muted),
           const SizedBox(height: 8),
           DropdownButtonFormField<T>(
             initialValue: value,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            ),
+            dropdownColor: AppColors.surface,
+            borderRadius: BorderRadius.circular(12),
+            icon: Icon(Icons.expand_more, color: AppColors.muted),
+            style: TextStyle(fontFamily: AppTheme.mono, fontSize: 15, color: AppColors.text),
             items: items
                 .map(
                   (item) => DropdownMenuItem<T>(
@@ -203,30 +244,45 @@ class CalculatorDropdown<T> extends StatelessWidget {
   }
 }
 
+/// One result line in the output panel: mono label on the left, the value
+/// on the right, hairline underneath - the "Conductor ampacity .... 30 A"
+/// row from the design's verification card.
 class ResultMetric extends StatelessWidget {
   const ResultMetric({
     super.key,
     required this.label,
     required this.value,
-    this.color = Colors.red,
+    this.color,
   });
 
   final String label;
   final String value;
-  final Color color;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Column(
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: AppColors.line)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.baseline,
+        textBaseline: TextBaseline.alphabetic,
         children: [
-          Text(label, style: const TextStyle(fontSize: 16, color: Colors.grey)),
-          const SizedBox(height: 6),
+          Expanded(
+            child: Text(label, style: TextStyle(fontSize: 14, color: AppColors.muted)),
+          ),
+          const SizedBox(width: 12),
           Text(
             value,
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: color),
+            textAlign: TextAlign.right,
+            style: TextStyle(
+              fontFamily: AppTheme.mono,
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
+              color: color ?? AppColors.text,
+            ),
           ),
         ],
       ),

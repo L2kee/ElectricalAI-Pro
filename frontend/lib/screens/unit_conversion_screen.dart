@@ -91,6 +91,7 @@ class _UnitConversionScreenState extends State<UnitConversionScreen> {
       result: _result == null
           ? null
           : Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 ResultMetric(
                   label: 'Result',

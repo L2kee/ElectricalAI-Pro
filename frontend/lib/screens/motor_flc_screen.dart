@@ -90,13 +90,14 @@ class _MotorFlcScreenState extends State<MotorFlcScreen> {
       result: _result == null
           ? null
           : Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 ResultMetric(label: 'Full-load current', value: '${_result!.fullLoadCurrent} A'),
                 ResultMetric(
                   label: 'Min. conductor ampacity (125%)',
                   value: '${_result!.minConductorAmpacityAmps} A',
                 ),
-                Text(_result!.notes, textAlign: TextAlign.center, style: const TextStyle(color: Colors.grey)),
+                ResultNote(_result!.notes),
               ],
             ),
     );
