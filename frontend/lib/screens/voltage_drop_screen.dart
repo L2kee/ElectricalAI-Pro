@@ -92,28 +92,19 @@ class _VoltageDropScreenState extends State<VoltageDropScreen> {
       result: _result == null
           ? null
           : Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 ResultMetric(label: 'Voltage drop', value: '${_result!.voltageDrop.toStringAsFixed(2)} V'),
                 ResultMetric(label: 'Percent drop', value: '${_result!.percentDrop.toStringAsFixed(2)}%'),
-                Text(
+                const SizedBox(height: 16),
+                StatusTag(
                   _result!.within3Percent
                       ? '✔ Within a common 3% branch-circuit target'
                       : _result!.within5Percent
                           ? '⚠ Over 3%, within a common 5% feeder-plus-branch target'
                           : '✖ Over a common 5% feeder-plus-branch target',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: _result!.within3Percent
-                        ? Colors.green
-                        : _result!.within5Percent
-                            ? Colors.orange
-                            : Colors.red,
-                  ),
                 ),
-                const SizedBox(height: 12),
-                Text(_result!.notes, textAlign: TextAlign.center, style: const TextStyle(color: Colors.grey)),
+                ResultNote(_result!.notes),
               ],
             ),
     );

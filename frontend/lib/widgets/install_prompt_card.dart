@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../services/install_service.dart';
 import '../theme/app_colors.dart';
+import '../theme/app_theme.dart';
 
 /// Home-screen "Add to Home Screen" card. Three real states, not one:
 ///
@@ -74,14 +75,14 @@ class _InstallPromptCardState extends State<InstallPromptCard> {
     if (InstallService.isIOS) {
       return _Card(
         icon: Icons.ios_share,
-        iconColor: AppColors.primary,
+        iconColor: AppColors.signal,
         title: 'Add to Home Screen',
         onDismiss: () => setState(() => _dismissed = true),
         child: const Padding(
           padding: EdgeInsets.only(top: 4),
           child: Text(
-            'Tap the Share icon in Safari, then "Add to Home Screen" - '
-            'iOS only allows this as a manual step, there is no automatic button here.',
+            'Tap the Share icon in Safari, then "Add to Home Screen". '
+            'iOS only allows this as a manual step, so there is no automatic button here.',
           ),
         ),
       );
@@ -91,7 +92,7 @@ class _InstallPromptCardState extends State<InstallPromptCard> {
 
     return _Card(
       icon: Icons.add_to_home_screen,
-      iconColor: AppColors.success,
+      iconColor: AppColors.signal,
       title: 'Add to Home Screen',
       onDismiss: () => setState(() => _dismissed = true),
       child: Column(
@@ -133,29 +134,20 @@ class _Card extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 20),
+      decoration: AppTheme.panel(),
+      padding: const EdgeInsets.all(18),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 56,
-            height: 56,
+            width: 40,
+            height: 40,
             decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.08),
-              shape: BoxShape.circle,
+              color: AppColors.signalSoft,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: AppColors.signalRing),
             ),
-            child: Icon(icon, color: iconColor, size: 28),
+            child: Icon(icon, color: iconColor, size: 20),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -168,9 +160,9 @@ class _Card extends StatelessWidget {
                       child: Text(
                         title,
                         style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.dark,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.text,
                         ),
                       ),
                     ),
@@ -179,13 +171,13 @@ class _Card extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16),
                       child: Padding(
                         padding: const EdgeInsets.all(4),
-                        child: Icon(Icons.close, size: 18, color: AppColors.lightText),
+                        child: Icon(Icons.close, size: 18, color: AppColors.faint),
                       ),
                     ),
                   ],
                 ),
                 DefaultTextStyle(
-                  style: TextStyle(fontSize: 14, color: AppColors.lightText, height: 1.4),
+                  style: TextStyle(fontSize: 14, color: AppColors.muted, height: 1.4),
                   child: child,
                 ),
               ],

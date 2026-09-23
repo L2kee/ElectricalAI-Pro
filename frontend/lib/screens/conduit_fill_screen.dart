@@ -82,20 +82,14 @@ class _ConduitFillScreenState extends State<ConduitFillScreen> {
       result: _result == null
           ? null
           : Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 ResultMetric(label: 'Total wire area', value: '${_result!.totalWireArea.toStringAsFixed(4)} sq. in.'),
                 ResultMetric(label: 'Fill', value: '${_result!.percentFill.toStringAsFixed(2)}%'),
                 ResultMetric(label: 'Limit', value: '${_result!.fillLimitPercent.toStringAsFixed(0)}%'),
-                Text(
-                  _result!.withinLimit ? '✔ Within fill limit' : '✖ Over fill limit',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: _result!.withinLimit ? Colors.green : Colors.red,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(_result!.notes, textAlign: TextAlign.center, style: const TextStyle(color: Colors.grey)),
+                const SizedBox(height: 16),
+                StatusTag(_result!.withinLimit ? '✔ Within fill limit' : '✖ Over fill limit'),
+                ResultNote(_result!.notes),
               ],
             ),
     );

@@ -22,7 +22,7 @@ class AppScaffold extends StatelessWidget {
               maxWidth: 1100,
             ),
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(AppSpacing.lg),
+              padding: const EdgeInsets.fromLTRB(AppSpacing.lg - 4, AppSpacing.md, AppSpacing.lg - 4, AppSpacing.lg),
               child: child,
             ),
           ),

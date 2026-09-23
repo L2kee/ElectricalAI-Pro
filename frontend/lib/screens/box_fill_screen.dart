@@ -83,19 +83,13 @@ class _BoxFillScreenState extends State<BoxFillScreen> {
       result: _result == null
           ? null
           : Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 ResultMetric(label: 'Required volume', value: '${_result!.requiredVolume.toStringAsFixed(2)} cu. in.'),
                 ResultMetric(label: 'Remaining volume', value: '${_result!.remainingVolume.toStringAsFixed(2)} cu. in.'),
-                Text(
-                  _result!.boxIsLargeEnough ? '✔ Box is large enough' : '✖ Box is NOT large enough',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: _result!.boxIsLargeEnough ? Colors.green : Colors.red,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(_result!.notes, textAlign: TextAlign.center, style: const TextStyle(color: Colors.grey)),
+                const SizedBox(height: 16),
+                StatusTag(_result!.boxIsLargeEnough ? '✔ Box is large enough' : '✖ Box is NOT large enough'),
+                ResultNote(_result!.notes),
               ],
             ),
     );

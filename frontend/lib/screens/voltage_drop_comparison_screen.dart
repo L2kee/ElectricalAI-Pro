@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../calculators/tables.dart';
 import '../calculators/voltage_drop_comparison.dart';
+import '../theme/app_colors.dart';
 import '../widgets/calculator_scaffold.dart';
+import '../widgets/glass.dart';
 
 class VoltageDropComparisonScreen extends StatefulWidget {
   const VoltageDropComparisonScreen({super.key});
@@ -86,66 +88,39 @@ class _VoltageDropComparisonScreenState extends State<VoltageDropComparisonScree
   }
 
   Widget _buildResult(VoltageDropComparisonResult result) {
+    String mark(bool within3, bool within5) => within3 ? '✔' : (within5 ? '⚠' : '✖');
+    Color markColor(bool within3, bool within5) =>
+        within3 ? AppColors.pass : (within5 ? AppColors.warning : AppColors.danger);
+
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (result.smallestSizeWithin3Percent != null)
-          Text(
-            '✔ Smallest within 3%: ${result.smallestSizeWithin3Percent}',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.green),
-          )
-        else
-          const Text(
-            '✖ No listed size meets a 3% target for this run',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.red),
-          ),
-        const SizedBox(height: 4),
-        if (result.smallestSizeWithin5Percent != null)
-          Text(
-            '✔ Smallest within 5%: ${result.smallestSizeWithin5Percent}',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.orange),
-          )
-        else
-          const Text(
-            '✖ No listed size meets a 5% target for this run',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.red),
-          ),
+        StatusTag(
+          result.smallestSizeWithin3Percent != null
+              ? '✔ Smallest within 3%: ${result.smallestSizeWithin3Percent}'
+              : '✖ No listed size meets a 3% target for this run',
+        ),
+        const SizedBox(height: 8),
+        StatusTag(
+          result.smallestSizeWithin5Percent != null
+              ? '⚠ Smallest within 5%: ${result.smallestSizeWithin5Percent}'
+              : '✖ No listed size meets a 5% target for this run',
+        ),
         const SizedBox(height: 16),
-        Table(
-          columnWidths: const {
-            0: FlexColumnWidth(2),
-            1: FlexColumnWidth(2),
-            2: FlexColumnWidth(2),
-            3: FlexColumnWidth(1),
-          },
-          children: [
-            const TableRow(
-              children: [
-                Padding(padding: EdgeInsets.all(6), child: Text('Size', style: TextStyle(fontWeight: FontWeight.bold))),
-                Padding(padding: EdgeInsets.all(6), child: Text('Drop', style: TextStyle(fontWeight: FontWeight.bold))),
-                Padding(padding: EdgeInsets.all(6), child: Text('%', style: TextStyle(fontWeight: FontWeight.bold))),
-                Padding(padding: EdgeInsets.all(6), child: Text('', style: TextStyle(fontWeight: FontWeight.bold))),
-              ],
-            ),
+        MonoTable(
+          headers: const ['Size', 'Drop', '%', ''],
+          flex: const [2, 2, 2, 1],
+          rows: [
             for (final row in result.results)
-              TableRow(
-                children: [
-                  Padding(padding: const EdgeInsets.all(6), child: Text(row.wireSize)),
-                  Padding(padding: const EdgeInsets.all(6), child: Text('${row.voltageDrop.toStringAsFixed(2)} V')),
-                  Padding(padding: const EdgeInsets.all(6), child: Text('${row.percentDrop.toStringAsFixed(2)}%')),
-                  Padding(
-                    padding: const EdgeInsets.all(6),
-                    child: Text(
-                      row.within3Percent ? '✔' : (row.within5Percent ? '⚠' : '✖'),
-                      style: TextStyle(
-                        color: row.within3Percent
-                            ? Colors.green
-                            : (row.within5Percent ? Colors.orange : Colors.red),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              [
+                Text(row.wireSize),
+                Text('${row.voltageDrop.toStringAsFixed(2)} V'),
+                Text('${row.percentDrop.toStringAsFixed(2)}%'),
+                Text(
+                  mark(row.within3Percent, row.within5Percent),
+                  style: TextStyle(color: markColor(row.within3Percent, row.within5Percent)),
+                ),
+              ],
           ],
         ),
       ],

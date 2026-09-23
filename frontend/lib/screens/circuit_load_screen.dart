@@ -63,6 +63,7 @@ class _CircuitLoadScreenState extends State<CircuitLoadScreen> {
       result: _result == null
           ? null
           : Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 ResultMetric(label: 'Power', value: '${_result!.power.toStringAsFixed(2)} W'),
                 ResultMetric(label: 'Voltage', value: '${_result!.voltage.toStringAsFixed(2)} V'),
@@ -73,7 +74,7 @@ class _CircuitLoadScreenState extends State<CircuitLoadScreen> {
                     label: 'Next standard breaker',
                     value: '${_result!.suggestedBreakerAmps} A',
                   ),
-                Text(_result!.notes, textAlign: TextAlign.center, style: const TextStyle(color: Colors.grey)),
+                ResultNote(_result!.notes),
               ],
             ),
     );
