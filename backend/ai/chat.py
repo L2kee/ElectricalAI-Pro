@@ -22,6 +22,13 @@ MAX_TOOL_ROUNDS = 8
 # anywhere near that long.
 MAX_TOTAL_SECONDS = 90.0
 
+# The configured NVIDIA model reasons before it answers, and that reasoning
+# counts against max_tokens. At the old 1024 cap, safety answers were cut off
+# mid-sentence (one right before its warning section). 3072 leaves room for
+# reasoning plus a full answer while staying well inside the 60s request
+# timeout at the model's observed ~70 tokens/s.
+DEFAULT_MAX_TOKENS = 3072
+
 logger = logging.getLogger(__name__)
 
 
@@ -37,7 +44,7 @@ class AIChat:
         self,
         messages,
         temperature: float = 0.3,
-        max_tokens: int = 1024,
+        max_tokens: int = DEFAULT_MAX_TOKENS,
         use_tools: bool = True,
         response_format: dict | None = None,
     ) -> str:
