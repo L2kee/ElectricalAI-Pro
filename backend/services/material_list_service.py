@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import re
 
-from backend.ai.chat import AIChat
+from backend.ai.chat import DEFAULT_MAX_TOKENS, AIChat
 from backend.ai.prompts import MATERIAL_LIST_PROMPT, SYSTEM_PROMPT
 from backend.services.errors import CalculatorError
 
@@ -31,7 +31,9 @@ class MaterialListService:
         raw = self.chat.ask(
             messages,
             temperature=0.2,
-            max_tokens=1200,
+            # Was 1200: the reasoning model spent ~1k tokens thinking first
+            # and the JSON got cut off mid-list (finish_reason=length).
+            max_tokens=DEFAULT_MAX_TOKENS,
             use_tools=False,
             response_format={"type": "json_object"},
         )
@@ -98,16 +100,33 @@ class MaterialListService:
 
         return {"items": normalized, "assumptions": [str(a) for a in assumptions]}
 
-    @staticmethod
-    def _extract_json_object(text: str) -> str | None:
-        """Return the substring spanning the first top-level {...} object in
-        text, or None if no balanced object is found. String-aware so a
-        brace inside a quoted value (or an escaped quote) doesn't throw off
-        the depth count."""
-        start = text.find("{")
-        if start == -1:
-            return None
+    @classmethod
+    def _extract_json_object(cls, text: str) -> str | None:
+        """Return the first balanced {...} substring of text that parses as a
+        JSON object with an "items" key, or None.
 
+        Tries every "{" as a starting point rather than only the first one:
+        the model sometimes opens with a stray extra brace ("{\n{...}") whose
+        depth never returns to zero, or leaks reasoning text that contains
+        braces of its own before the real object."""
+        start = text.find("{")
+        while start != -1:
+            candidate = cls._balanced_object_at(text, start)
+            if candidate is not None:
+                try:
+                    data = json.loads(candidate)
+                except json.JSONDecodeError:
+                    data = None
+                if isinstance(data, dict) and "items" in data:
+                    return candidate
+            start = text.find("{", start + 1)
+        return None
+
+    @staticmethod
+    def _balanced_object_at(text: str, start: int) -> str | None:
+        """Return the balanced {...} substring beginning at text[start], or
+        None if it never closes. String-aware so a brace inside a quoted
+        value (or an escaped quote) doesn't throw off the depth count."""
         depth = 0
         in_string = False
         escape = False
