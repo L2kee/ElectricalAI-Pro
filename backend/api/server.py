@@ -70,7 +70,7 @@ def _client_ip(request: Request) -> str:
     return get_remote_address(request)
 
 
-_rate_limit_chat = os.getenv("RATE_LIMIT_CHAT", "10/hour")
+_rate_limit_chat = os.getenv("RATE_LIMIT_CHAT", "100/hour")
 
 limiter = Limiter(key_func=_client_ip)
 app.state.limiter = limiter
