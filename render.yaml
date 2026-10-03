@@ -14,7 +14,7 @@ services:
       - key: ALLOWED_ORIGINS
         value: https://evogencyglobal.com,https://www.evogencyglobal.com
       - key: RATE_LIMIT_CHAT
-        value: 10/hour
+        value: 1000/hour
       # In-memory rate limiting (see backend/api/server.py) only stays
       # coherent on a single instance. Fine on Free/Starter (no
       # autoscaling on those tiers) - if this service is ever scaled to
