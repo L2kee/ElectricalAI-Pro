@@ -10,7 +10,7 @@ services:
       - key: NVIDIA_API_KEY
         sync: false
       - key: NVIDIA_MODEL
-        value: nvidia/nemotron-3-super-120b-a12b
+        value: nvidia/nemotron-3.5-super-vl-120b-a12b
       - key: ALLOWED_ORIGINS
         value: https://evogencyglobal.com,https://www.evogencyglobal.com
       - key: RATE_LIMIT_CHAT
