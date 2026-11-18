@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 
 import '../calculators/tables.dart';
 import '../theme/app_colors.dart';
+import '../theme/app_theme.dart';
 import '../widgets/disclaimer_banner.dart';
 import '../widgets/glass.dart';
 
@@ -14,7 +16,7 @@ class NecReferenceScreen extends StatelessWidget {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('NEC Quick Reference'),
+          title: const PageTitle('NEC Quick Reference'),
           bottom: const TabBar(
             isScrollable: true,
             tabs: [
@@ -54,18 +56,42 @@ class _BreakerSizesTab extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        const Text(
-          'Standard overcurrent device ratings (breakers and fuses)',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        Semantics(
+          header: true,
+          headingLevel: 2,
+          child: Text('Standard overcurrent device ratings (breakers and fuses)', style: AppTheme.heading(size: 19)),
         ),
         const SizedBox(height: 12),
-        Wrap(
-          spacing: 10,
-          runSpacing: 10,
-          children: [
-            for (final amps in ElectricalTables.standardBreakers)
-              Chip(label: Text('$amps A')),
-          ],
+        // Reference values, not choices: a plain list. (As Chips, Flutter
+        // exposed each one as a checkbox.)
+        Semantics(
+          role: SemanticsRole.list,
+          container: true,
+          explicitChildNodes: true,
+          child: Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: [
+              for (final amps in ElectricalTables.standardBreakers)
+                Semantics(
+                  role: SemanticsRole.listItem,
+                  container: true,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceSunken,
+                      borderRadius: BorderRadius.circular(999),
+                      border: Border.all(color: AppColors.line),
+                    ),
+                    child: Text(
+                      '$amps A',
+                      semanticsLabel: '$amps amps',
+                      style: TextStyle(fontFamily: AppTheme.mono, fontSize: 14, color: AppColors.text, fontFeatures: AppTheme.numeric),
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ],
     );
@@ -80,9 +106,10 @@ class _BoxVolumesTab extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        const Text(
-          'Standard box volumes',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        Semantics(
+          header: true,
+          headingLevel: 2,
+          child: Text('Standard box volumes', style: AppTheme.heading(size: 19)),
         ),
         const SizedBox(height: 8),
         Text(
@@ -91,6 +118,7 @@ class _BoxVolumesTab extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         MonoTable(
+          caption: 'Standard box volumes',
           headers: const ['Box type', 'cu. in.'],
           flex: const [3, 1],
           rows: [
@@ -111,18 +139,20 @@ class _BendRadiusTab extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        const Text(
-          'Minimum conduit/tubing bend radius',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        Semantics(
+          header: true,
+          headingLevel: 2,
+          child: Text('Minimum conduit and tubing bend radius', style: AppTheme.heading(size: 19)),
         ),
         const SizedBox(height: 8),
         Text(
-          'One-shot/full-shoe covers machine benders; other bends covers hand and hickey benders.',
+          'One shot (full shoe) covers machine benders. Other bends covers hand and hickey benders.',
           style: TextStyle(color: AppColors.muted),
         ),
         const SizedBox(height: 12),
         MonoTable(
-          headers: const ['Trade size', 'One-shot (in)', 'Other bends (in)'],
+          caption: 'Minimum conduit and tubing bend radius',
+          headers: const ['Trade size', 'One shot (in)', 'Other bends (in)'],
           rows: [
             for (final entry in ElectricalTables.necConduitBendRadiusIn.entries)
               [

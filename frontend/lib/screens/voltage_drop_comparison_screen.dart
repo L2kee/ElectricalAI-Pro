@@ -108,7 +108,8 @@ class _VoltageDropComparisonScreenState extends State<VoltageDropComparisonScree
         ),
         const SizedBox(height: 16),
         MonoTable(
-          headers: const ['Size', 'Drop', '%', ''],
+          caption: 'Voltage drop by wire size',
+          headers: const ['Size', 'Drop', '%', 'Target'],
           flex: const [2, 2, 2, 1],
           rows: [
             for (final row in result.results)
@@ -118,6 +119,11 @@ class _VoltageDropComparisonScreenState extends State<VoltageDropComparisonScree
                 Text('${row.percentDrop.toStringAsFixed(2)}%'),
                 Text(
                   mark(row.within3Percent, row.within5Percent),
+                  semanticsLabel: row.within3Percent
+                      ? 'Within 3%'
+                      : row.within5Percent
+                          ? 'Within 5%'
+                          : 'Over 5%',
                   style: TextStyle(color: markColor(row.within3Percent, row.within5Percent)),
                 ),
               ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../settings/app_settings.dart';
 import '../theme/app_colors.dart';
+import '../widgets/glass.dart';
 import '../widgets/section_title.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -15,7 +16,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: const PageTitle('Settings')),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 28, 20, 32),
         children: [
@@ -37,7 +38,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           children: [
                             Text('Theme', style: TextStyle(fontSize: 16)),
                             SizedBox(height: 2),
-                            Text('Same screens, two looks'),
+                            Text('EVOGENCY or the original Classic look'),
                           ],
                         ),
                       ),
@@ -47,7 +48,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ValueListenableBuilder<AppThemeStyle>(
                     valueListenable: AppSettings.themeStyle,
                     builder: (context, style, _) {
-                      return SizedBox(
+                      return Semantics(
+                        label: 'Theme',
+                        container: true,
+                        child: SizedBox(
                         width: double.infinity,
                         child: SegmentedButton<AppThemeStyle>(
                           showSelectedIcon: false,
@@ -58,6 +62,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           selected: {style},
                           onSelectionChanged: (selection) =>
                               AppSettings.setThemeStyle(selection.first),
+                        ),
                         ),
                       );
                     },
@@ -88,7 +93,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   secondary: const Icon(Icons.shield_outlined),
                   title: const Text('Enable hints'),
                   subtitle: const Text(
-                    'Show the planning-aid disclaimer on calculators and AI screens',
+                    'Show the planning aid disclaimer on calculators and AI screens',
                   ),
                   value: enabled,
                   onChanged: AppSettings.setEnableHints,
@@ -127,7 +132,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               leading: Icon(Icons.support_agent_outlined),
               title: Text('Support'),
               subtitle: Text(
-                'Calculators work offline. The AI assistant and material lists need the AI backend: hosted on the web version, started locally with the desktop app.',
+                'Calculators work offline. The AI assistant and material lists need the AI backend. It is hosted for the web version and started locally with the desktop app.',
               ),
             ),
           ),

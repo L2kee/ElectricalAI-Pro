@@ -4,9 +4,12 @@ import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import 'glass.dart';
 
-/// Section header in the design's editorial style: a small signal-colored
-/// mono eyebrow ("(A) CALCULATORS") over a bold heading, with an optional
-/// mono note on the right ("11 modules").
+/// Section header in the site's editorial style: a small signal-colored
+/// eyebrow ("(A) CALCULATORS") over a Cormorant heading, with an optional
+/// note on the right ("11 modules").
+///
+/// The heading is a heading for screen readers. The eyebrow is decoration
+/// (the heading already says what the section is), so it's left out.
 class SectionTitle extends StatelessWidget {
   final String eyebrow;
   final String text;
@@ -28,17 +31,12 @@ class SectionTitle extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              MonoLabel(eyebrow, color: AppColors.signal),
+              ExcludeSemantics(child: MonoLabel(eyebrow, color: AppColors.signal)),
               const SizedBox(height: 10),
-              Text(
-                text,
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: -0.5,
-                  height: 1.15,
-                  color: AppColors.text,
-                ),
+              Semantics(
+                header: true,
+                headingLevel: 2,
+                child: Text(text, style: AppTheme.heading(size: 27, height: 1.12)),
               ),
             ],
           ),
@@ -47,7 +45,10 @@ class SectionTitle extends StatelessWidget {
           const SizedBox(width: 12),
           Padding(
             padding: const EdgeInsets.only(bottom: 4),
-            child: Text(trailing!, style: TextStyle(fontFamily: AppTheme.mono, fontSize: 12, color: AppColors.faint)),
+            child: Text(
+              trailing!,
+              style: TextStyle(fontFamily: AppTheme.mono, fontSize: 12.5, color: AppColors.faint),
+            ),
           ),
         ],
       ],

@@ -24,7 +24,7 @@ void main() {
 
   testWidgets('switching to Classic re-themes the running app', (WidgetTester tester) async {
     await tester.pumpWidget(const ElectricalAIProApp());
-    final kineticBackground = AppColors.background;
+    final brandBackground = AppColors.background;
 
     await AppSettings.setThemeStyle(AppThemeStyle.classic);
     // Not pumpAndSettle: the home screen's pulse dot animates forever.
@@ -35,8 +35,9 @@ void main() {
     final context = tester.element(find.text('Start calculating'));
     expect(AppColors.isClassic, isTrue);
     expect(Theme.of(context).scaffoldBackgroundColor, AppColors.background);
-    expect(AppColors.background, isNot(kineticBackground));
-    expect(Theme.of(context).colorScheme.primary, const Color(0xFFE53935));
+    expect(AppColors.background, isNot(brandBackground));
+    // Classic dark's red was lightened 2026-11-17 to pass 4.5:1 on dark.
+    expect(Theme.of(context).colorScheme.primary, const Color(0xFFF47370));
 
     final prefs = await SharedPreferences.getInstance();
     expect(prefs.getString('theme_style'), 'classic');
@@ -47,7 +48,7 @@ void main() {
     await tester.tap(find.byTooltip('Settings'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Kinetic glass'), findsOneWidget);
+    expect(find.text('EVOGENCY'), findsOneWidget);
     expect(find.text('Classic'), findsOneWidget);
 
     await tester.tap(find.text('Classic'));

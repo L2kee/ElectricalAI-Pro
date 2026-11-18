@@ -3,8 +3,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// The two visual themes. Both share the same screens; a theme only
 /// changes colors, type, and how surfaces are drawn.
+///
+/// `kinetic` is the EVOGENCY brand theme (it replaced the old Kinetic glass
+/// look on 2026-11-17). The enum name stays `kinetic` so the value already
+/// saved in people's browsers keeps working.
 enum AppThemeStyle {
-  kinetic('Kinetic glass'),
+  kinetic('EVOGENCY'),
   classic('Classic');
 
   const AppThemeStyle(this.label);
