@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 
 import 'settings/app_settings.dart';
 import 'theme/app_colors.dart';
@@ -7,6 +9,14 @@ import 'screens/home_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  if (kIsWeb) {
+    // Flutter web draws to a canvas and only builds the accessible DOM
+    // (roles, labels, focus) after someone finds a hidden "Enable
+    // accessibility" button. Turn it on from the start so screen readers,
+    // keyboard users, voice control, and browser tools all get the real
+    // page. Held for the app's lifetime, so the handle is never disposed.
+    SemanticsBinding.instance.ensureSemantics();
+  }
   await AppSettings.load();
   runApp(const ElectricalAIProApp());
 }
@@ -15,7 +25,9 @@ Future<void> main() async {
 /// the real Windows desktop build. Above it (a desktop browser tab), every
 /// screen - regardless of which internal Scaffold/wrapper it uses - gets
 /// framed as a centered glass panel instead of a layout stretched thin
-/// across a huge, otherwise-empty browser window.
+/// across a huge, otherwise-empty browser window. In the EVOGENCY theme
+/// the frame floats over the site's lotus backdrop, dimmed the same way
+/// the site dims it behind body copy.
 const double _wideScreenBreakpoint = 760;
 const double _wideScreenCardWidth = 680;
 
@@ -45,18 +57,36 @@ class ElectricalAIProApp extends StatelessWidget {
         // the navigation stack the way re-keying MaterialApp would.
         WidgetsBinding.instance.addPostFrameCallback((_) => _rebuildAll(context));
         return MaterialApp(
-          title: 'ElectricalAI Pro',
+          title: 'ElectricalAI Pro | EVOGENCY',
           debugShowCheckedModeBanner: false,
           theme: isDarkMode ? AppTheme.darkTheme : AppTheme.lightTheme,
           home: const HomeScreen(),
           builder: (context, child) {
             if (child == null) return const SizedBox.shrink();
+            // The whole app is the page's main landmark, the same as the
+            // site's <main id="main">, so screen readers can jump to it and
+            // axe's "content outside landmarks" rule is satisfied.
+            child = Semantics(role: SemanticsRole.main, container: true, explicitChildNodes: true, child: child);
 
             final isWideScreen = MediaQuery.of(context).size.width > _wideScreenBreakpoint;
             if (!isWideScreen) return child;
 
-            return ColoredBox(
-              color: AppColors.backdrop,
+            return DecoratedBox(
+              decoration: BoxDecoration(
+                color: AppColors.backdrop,
+                image: isClassic
+                    ? null
+                    : DecorationImage(
+                        image: const AssetImage('assets/brand/lotus-backdrop.webp'),
+                        fit: BoxFit.cover,
+                        colorFilter: ColorFilter.mode(
+                          isDarkMode
+                              ? Colors.black.withValues(alpha: 0.8)
+                              : AppColors.backdrop.withValues(alpha: 0.88),
+                          BlendMode.srcOver,
+                        ),
+                      ),
+              ),
               child: Center(
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: _wideScreenCardWidth),

@@ -26,14 +26,14 @@ class DisclaimerBanner extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(Icons.shield_outlined, size: 16, color: tint),
+              ExcludeSemantics(child: Icon(Icons.shield_outlined, size: 16, color: tint)),
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
                   compact
                       ? 'Planning aid only. Confirm against the codebook, manufacturer data, and the AHJ before you pull wire or pull a permit.'
                       : 'ElectricalAI Pro is a planning and learning aid. Verify every result against the applicable electrical code, manufacturer documentation, and the authority having jurisdiction before performing electrical work.',
-                  style: TextStyle(fontSize: 12.5, height: 1.45, color: AppColors.muted),
+                  style: TextStyle(fontSize: 13, height: 1.45, color: AppColors.muted),
                 ),
               ),
             ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/feature_card.dart';
+import '../widgets/glass.dart';
 import '../widgets/section_title.dart';
 
 import 'ohms_law_screen.dart';
@@ -50,7 +51,7 @@ class CalculatorsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Calculators'),
+        title: const PageTitle('Calculators'),
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 28, 20, 32),

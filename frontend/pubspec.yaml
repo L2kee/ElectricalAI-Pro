@@ -27,6 +27,9 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
+  assets:
+    - assets/brand/
+
   fonts:
     - family: Inter
       fonts:
@@ -39,8 +42,14 @@ flutter:
           weight: 700
         - asset: assets/fonts/Inter-ExtraBold.ttf
           weight: 800
-    - family: JetBrainsMono
+    # EVOGENCY's site font, for headings and the wordmark. Static Latin
+    # subsets cut from the Google Fonts variable file (OFL, license next
+    # to them), so the desktop build still works offline.
+    - family: CormorantGaramond
       fonts:
-        - asset: assets/fonts/JetBrainsMono-Regular.ttf
-        - asset: assets/fonts/JetBrainsMono-Medium.ttf
+        - asset: assets/fonts/CormorantGaramond-500.ttf
           weight: 500
+        - asset: assets/fonts/CormorantGaramond-600.ttf
+          weight: 600
+        - asset: assets/fonts/CormorantGaramond-700.ttf
+          weight: 700

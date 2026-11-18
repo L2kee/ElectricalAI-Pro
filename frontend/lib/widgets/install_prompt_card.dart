@@ -139,15 +139,16 @@ class _Card extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: AppColors.signalSoft,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: AppColors.signalRing),
+          ExcludeSemantics(
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: ShapeDecoration(
+                color: AppColors.signalSoft,
+                shape: AppTheme.facet(side: BorderSide(color: AppColors.signalRing)),
+              ),
+              child: Icon(icon, color: iconColor, size: 20),
             ),
-            child: Icon(icon, color: iconColor, size: 20),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -157,22 +158,16 @@ class _Card extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: Text(
-                        title,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.text,
-                        ),
+                      child: Semantics(
+                        header: true,
+                        headingLevel: 2,
+                        child: Text(title, style: AppTheme.heading(size: 18)),
                       ),
                     ),
-                    InkWell(
-                      onTap: onDismiss,
-                      borderRadius: BorderRadius.circular(16),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4),
-                        child: Icon(Icons.close, size: 18, color: AppColors.faint),
-                      ),
+                    IconButton(
+                      onPressed: onDismiss,
+                      tooltip: 'Dismiss the install tip',
+                      icon: Icon(Icons.close, size: 20, color: AppColors.muted),
                     ),
                   ],
                 ),

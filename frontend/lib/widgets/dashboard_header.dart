@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../services/site_link.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import 'glass.dart';
 
-/// Top bar: brand mark + "ElectricalAI Pro" wordmark, with the info and
-/// settings buttons on the right.
+/// Top bar: the EVOGENCY lotus (a link home on the web build, the same
+/// spot as the site's nav logo), the "ElectricalAI Pro" wordmark, and the
+/// info and settings buttons on the right.
 class DashboardHeader extends StatelessWidget {
   const DashboardHeader({super.key, required this.onOpenSettings});
 
@@ -15,26 +17,47 @@ class DashboardHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const BrandMark(),
-        const SizedBox(width: 10),
+        if (SiteLink.available)
+          GlassIconButton(
+            icon: Icons.home_outlined,
+            tooltip: 'EVOGENCY home',
+            link: SiteLink.home,
+            onTap: () => SiteLink.open(SiteLink.home),
+            child: const EvogencyLotus(height: 22),
+          )
+        else
+          const BrandMark(size: 40),
+        const SizedBox(width: 12),
         // Expanded, not Flexible + Spacer: those two split the free space
         // in half, which left a gap after the buttons and ellipsized the
         // wordmark on phones even though it fit.
         Expanded(
-          child: Text.rich(
-            TextSpan(
+          child: Semantics(
+            label: 'ElectricalAI Pro, by EVOGENCY',
+            excludeSemantics: true,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                const TextSpan(text: 'ElectricalAI '),
-                TextSpan(text: 'Pro', style: TextStyle(color: AppColors.signal)),
+                Text.rich(
+                  TextSpan(
+                    children: [
+                      const TextSpan(text: 'ElectricalAI '),
+                      TextSpan(text: 'Pro', style: TextStyle(color: AppColors.signal)),
+                    ],
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTheme.heading(size: 19, height: 1.05),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  'by EVOGENCY',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTheme.monoLabel(size: 10),
+                ),
               ],
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.w700,
-              letterSpacing: -0.2,
-              color: AppColors.text,
             ),
           ),
         ),
@@ -48,8 +71,8 @@ class DashboardHeader extends StatelessWidget {
                 title: const Text('About this app'),
                 content: const Text(
                   'Calculators run on your device and work offline. '
-                  'The AI assistant and material lists need the AI backend: '
-                  'hosted on the web version, started locally with the desktop app.',
+                  'The AI assistant and material lists need the AI backend. '
+                  'It is hosted for the web version and started locally with the desktop app.',
                 ),
                 actions: [
                   TextButton(
@@ -88,24 +111,25 @@ class DashboardHero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final headline = AppTheme.heading(size: 42, height: 1.0);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const StatusPill('NEC tables · Runs offline'),
         const SizedBox(height: 22),
-        Text.rich(
-          TextSpan(
+        // One heading for screen readers; two lines on screen so the
+        // accent line can carry the site's olive gradient.
+        Semantics(
+          header: true,
+          headingLevel: 1,
+          label: 'Electrical math, jobsite ready.',
+          excludeSemantics: true,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const TextSpan(text: 'Electrical math,\n'),
-              TextSpan(text: 'jobsite ready.', style: TextStyle(color: AppColors.signal)),
+              Text('Electrical math,', style: headline),
+              GradientText('jobsite ready.', style: headline.copyWith(fontStyle: FontStyle.normal)),
             ],
-          ),
-          style: TextStyle(
-            fontSize: 40,
-            fontWeight: FontWeight.w800,
-            letterSpacing: -1.2,
-            height: 1.02,
-            color: AppColors.text,
           ),
         ),
         const SizedBox(height: 16),
@@ -122,14 +146,14 @@ class DashboardHero extends StatelessWidget {
             ElevatedButton(
               onPressed: onStartCalculating,
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 26),
               ),
               child: const Text('Start calculating'),
             ),
             OutlinedButton(
               onPressed: onAskAssistant,
               style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 26),
               ),
               child: const Text('Ask the assistant'),
             ),
@@ -162,20 +186,21 @@ class _Stat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label.toUpperCase(), style: AppTheme.monoLabel(size: 10)),
-        const SizedBox(height: 4),
-        FittedBox(
-          fit: BoxFit.scaleDown,
-          alignment: Alignment.centerLeft,
-          child: Text(
-            value,
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: AppColors.text),
+    return Semantics(
+      label: '$label, $value',
+      excludeSemantics: true,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label.toUpperCase(), style: AppTheme.monoLabel(size: 10.5)),
+          const SizedBox(height: 4),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Text(value, style: AppTheme.heading(size: 26, height: 1.1)),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
