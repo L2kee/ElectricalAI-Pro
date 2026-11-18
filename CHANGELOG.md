@@ -38,6 +38,11 @@ This project follows the principles of **Keep a Changelog**, with entries organi
   end-of-life on NVIDIA's Build API (410 Gone) and no longer worked out of
   the box; replaced with `nvidia/nemotron-3-super-120b-a12b`, confirmed
   working for both tool-calling and plain chat against the live API
+- Default `NVIDIA_MODEL` (`nvidia/nemotron-3-super-120b-a12b`) was retired
+  by NVIDIA (404 "Function not found", though `/v1/models` still lists it),
+  which took the web AI Assistant down; replaced with
+  `nvidia/nemotron-3.5-super-vl-120b-a12b`, confirmed working for
+  tool-calling, the live-work safety refusal, and material lists
 
 ---
 

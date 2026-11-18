@@ -11,7 +11,7 @@ from backend.services.errors import CalculatorError
 
 load_dotenv()
 
-DEFAULT_MODEL = os.getenv("NVIDIA_MODEL", "nvidia/nemotron-3-super-120b-a12b")
+DEFAULT_MODEL = os.getenv("NVIDIA_MODEL", "nvidia/nemotron-3.5-super-vl-120b-a12b")
 
 
 class AIClient:
